@@ -44,7 +44,7 @@ public class ShoppingCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
-        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        //ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         OrderDao orderDataStore = OrderDaoMem.getInstance();
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
