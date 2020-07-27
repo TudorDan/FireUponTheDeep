@@ -1,9 +1,11 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.TemplateEngineUtil;
+import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.UserDao;
+import com.codecool.shop.dao.implementation.OrderDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.UserDaoMem;
@@ -25,11 +27,13 @@ public class CheckoutController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("category", productCategoryDataStore.find(1));
         context.setVariable("products", productDataStore.getBy(productCategoryDataStore.find(1)));
+        context.setVariable("order", orderDataStore);
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
@@ -57,7 +61,10 @@ public class CheckoutController extends HttpServlet {
         if(name != null && !name.trim().isEmpty() && email != null && !email.trim().isEmpty()
                 && phoneNumber != null && !phoneNumber.isEmpty() && billingAddress != null && !billingAddress.isEmpty()
                 && shippingAddress != null && !shippingAddress.isEmpty()) {
-            userDataStore.add(new User(name, email, Integer.parseInt(phoneNumber), billingAddress, shippingAddress));
+            context.setVariable("formError", false);
+            userDataStore.add(new User(name, email, phoneNumber, billingAddress, shippingAddress));
+            //resp.sendRedirect("payment-page");
+            engine.process("product/payment-page.html", context, resp.getWriter());
         } else {
             context.setVariable("formError", true);
             engine.process("product/checkout.html", context, resp.getWriter());
