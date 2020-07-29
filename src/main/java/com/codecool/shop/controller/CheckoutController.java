@@ -24,7 +24,7 @@ import java.io.IOException;
 public class CheckoutController extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         OrderDao orderDataStore = OrderDaoMem.getInstance();
@@ -58,16 +58,7 @@ public class CheckoutController extends HttpServlet {
         String shippingAddress = req.getParameter("shippingAddress");
 
         //set up first user
-        if(name != null && !name.trim().isEmpty() && email != null && !email.trim().isEmpty()
-                && phoneNumber != null && !phoneNumber.isEmpty() && billingAddress != null && !billingAddress.isEmpty()
-                && shippingAddress != null && !shippingAddress.isEmpty()) {
-            context.setVariable("formError", false);
-            userDataStore.add(new User(name, email, phoneNumber, billingAddress, shippingAddress));
-            //resp.sendRedirect("payment-page");
-            engine.process("product/payment-page.html", context, resp.getWriter());
-        } else {
-            context.setVariable("formError", true);
-            engine.process("product/checkout.html", context, resp.getWriter());
-        }
+        userDataStore.add(new User(name, email, phoneNumber, billingAddress, shippingAddress));
+        resp.sendRedirect("payment-page.html");
     }
 }
