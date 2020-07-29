@@ -55,6 +55,7 @@ public class PaymentController extends HttpServlet {
         boolean success = stripePayment.executePayment();
 
         if (success) {
+            resp.sendRedirect("order-confirmation.html");
             OrderToJSON.convert(orderDataStore.find(1));
             Mailer mailer = new Mailer("pythonsendmailtest75@gmail.com", "lpiiamlxlfsnzwxs",
                     userDataStore.find(1).getEmail(), "[CodeCoolShop]" +
@@ -62,7 +63,6 @@ public class PaymentController extends HttpServlet {
                     "Confirmation",
                     "Your order was processed!");
             mailer.start();
-            resp.sendRedirect("order-confirmation.html");
         } else {
             context.setVariable("paymentError", true);
             engine.process("product/payment-page.html", context, resp.getWriter());

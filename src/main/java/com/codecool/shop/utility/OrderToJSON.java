@@ -23,19 +23,21 @@ public class OrderToJSON {
             product.put("id", String.valueOf(item.getProduct().getId()));
             product.put("name", item.getProduct().getName());
             product.put("supplier", item.getProduct().getSupplier().getName());
-            product.put("quantity", String.valueOf(order.getLineItemList().stream().filter(i -> i.getProduct().getId() == item.getProduct().getId()).findFirst().get().getQuantity()));
+            product.put("quantity", String.valueOf(order.getLineItemList().stream().filter(
+                    i -> i.getProduct().getId() == item.getProduct().getId()
+            ).findFirst().get().getQuantity()));
             products.add(product);
         }
         jsonObject.put("products", products);
 
         try {
             Path currentRelativePath = Paths.get("");
-            String s = currentRelativePath.toAbsolutePath().toString() + "\\src\\main\\webapp\\static\\orders";
+            String s = currentRelativePath.toAbsolutePath().toString() + "\\src\\main\\webapp\\static\\orders\\";
             FileWriter file = new FileWriter(s + "order-" + order.getId() + ".json");
             file.write(jsonObject.toJSONString());
             file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("ERROR json: " + e.getMessage());
         }
     }
 }
