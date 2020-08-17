@@ -2,53 +2,14 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head.html :: copy"><title>Page Title</title></head>
 <body>
-    <nav  th:replace="fragments/navbar.html :: copy">Navbar</nav>
+    <nav th:replace="fragments/navbar.html :: copy">Navbar</nav>
 
     <main class="page catalog-page">
-        <section class="clean-block clean-catalog dark">
+        <section class="clean-block clean-catalog dark cl">
             <div class="container">
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="d-md-block">
-                                <a class="btn btn-link d-md-none filter-collapse" data-toggle="collapse" aria-expanded="true" aria-controls="filters" href="#filters" role="button">
-                                    Filters<i class="icon-arrow-down filter-caret"></i>
-                                </a>
-                                <div class="collapse d-md-block" id="filters">
-                                    <div class="filters">
-                                    <div class="filter-item">
-                                        <h3>Categories</h3>
-                                        <ul class="form-check">
-                                            <li class="form-check-label" th:each="category : ${categories}">
-                                                <a th:attr="href='?category='+${category.getId()}" th:text="${category.name}">Category name ...</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="filter-item">
-                                        <h3>Suppliers</h3>
-                                        <ul class="form-check">
-                                            <li class="form-check-label" th:each="supplier : ${suppliers}">
-                                                <a th:attr="href='?supplier='+${supplier.getId()}" th:text="${supplier.name}">Supplier name ...</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <!-- not required
-                                    <div class="filter-item">
-                                        <h3>OS</h3>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="androidCheck">
-                                            <label class="form-check-label" for="androidCheck">Android</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="iosCheck">
-                                            <label class="form-check-label" for="iosCheck">iOS</label>
-                                        </div>
-                                    </div>
-                                    -->
-                                </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div th:replace="fragments/sidebar.html :: copy">Sidebar</div>
                         <div class="col-md-9">
                             <div class="products">
                                 <div class="row no-gutters">
@@ -62,21 +23,12 @@
                                             <div class="product-name font-weight-bold"><a href="#" th:text="${product.name}">Product name</a></div>
                                             <div class="about"><p class="card-text" th:text="${product.description}">Product description... </p></div>
                                             <div class="about mt-4">
-                                                <!-- not required
-                                                <div class="rating">
-                                                    <img src="/static/assets/img/star.svg" alt="">
-                                                    <img src="/static/assets/img/star.svg" alt="">
-                                                    <img src="/static/assets/img/star.svg" alt="">
-                                                    <img src="/static/assets/img/star-half-empty.svg" alt="">
-                                                    <img src="/static/assets/img/star-empty.svg" alt="">
-                                                </div>
-                                                -->
                                                 <div class="price mx-auto">
                                                     <h3 th:text="${product.getPrice()}">100 USD</h3>
                                                 </div>
                                             </div>
                                             <div class="about mt-2">
-                                                <form method="post" action="/" class="mx-auto">
+                                                <form method="post" action="index.html" class="mx-auto">
                                                     <input type="hidden" name="productId" th:value="${product.getId()}">
                                                     <button type="submit" class="btn btn-primary btn-block btn-lg">
                                                         Add to cart
@@ -86,25 +38,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- not required
-                                <nav>
-                                    <ul class="pagination">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="" aria-label="Previous">
-                                                <span aria-hidden="true">«</span>
-                                            </a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="" aria-label="Next">
-                                                <span aria-hidden="true">»</span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -116,10 +49,10 @@
     <!-- Dark Footer -->
     <footer th:replace="fragments/footer.html :: copy">Footer</footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
-    <script src="/static/assets/js/script.min.js?h=037c4117326bceadaedc2681de8afadc"></script>
+    <script src="/static/assets/js/script.min.js"></script>
 </body>
 </html>

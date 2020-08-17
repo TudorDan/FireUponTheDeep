@@ -2,13 +2,12 @@ package com.codecool.shop.config;
 
 import com.codecool.shop.dao.DaoImplementations;
 import com.codecool.shop.dao.DataStore;
-import com.codecool.shop.model.Category;
-import com.codecool.shop.model.Product;
-import com.codecool.shop.model.Supplier;
+import com.codecool.shop.model.*;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.Date;
 
 @WebListener
 public class Initializer implements ServletContextListener {
@@ -31,8 +30,20 @@ public class Initializer implements ServletContextListener {
         dataStore.categoryDao.add(smartphone);
 
         //setting up products
-        dataStore.productDao.add(new Product("Amazon Fire", 49.9f, "USD", "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", "product_1.jpg", tablet, amazon));
-        dataStore.productDao.add(new Product("Lenovo IdeaPad Miix 700", 479, "USD", "Keyboard cover is included. Fanless Core m5 processor. Full-size USB ports. Adjustable kickstand.", "product_2.jpg", smartphone, lenovo));
-        dataStore.productDao.add(new Product("Amazon Fire HD 8", 89, "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", "product_3.jpg", tablet, amazon));
+        Date currentDate = new Date();
+        Product product1 = new Product("Amazon Fire", 49.9f, "USD", currentDate, "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support.", "product_1.jpg", tablet, amazon);
+        Product product2 = new Product("Lenovo IdeaPad Miix 700", 479, "USD", currentDate, "Keyboard cover is included. Fanless Core m5 processor. Full-size USB ports. Adjustable kickstand.", "product_2.jpg", smartphone, lenovo);
+        Product product3 = new Product("Amazon Fire HD 8", 89, "USD", currentDate, "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", "product_3.jpg", smartphone, amazon);
+        dataStore.productDao.add(product1);
+        dataStore.productDao.add(product2);
+        dataStore.productDao.add(product3);
+
+        //setting up users
+        Address address1 = new Address("Romania", "Bistrita", "420070", "str. Fericirii, nr. 14");
+        Address address2 = new Address("Poland", "Warsav", "430070", "Happiness str., no. 15");
+        User user1 = new User("Tudor Dan", "tudor_ist@gmail.com", "1234", "1234567890", address1, address1);
+        User user2 = new User("Pop Ion", "pop_ion@gmail.com", "2345", "0123456789", address2, null);
+        dataStore.userDao.add(user1);
+        dataStore.userDao.add(user2);
     }
 }
