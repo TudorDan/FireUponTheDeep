@@ -21,7 +21,7 @@
                                             <p th:if="${session.signupError}" th:text="${session.signupError}"
                                                class="alert-danger">Wrong data. Try again...</p>
                                         </div>
-                                        <form th:if="${session.user} == null" method="post" action="signup.html">
+                                        <form th:if="${session.user} == null" method="post" action="signup.html" accept-charset="utf-8">
                                             <div class="form-group">
                                                 <label for="name">Name</label>
                                                 <input class="form-control item" type="text" id="name" name="name" required

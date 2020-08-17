@@ -46,8 +46,8 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
 
         //check login data and store user in session if ok
-        User user = dataStore.userDao.find(email);
-        if (user != null && user.getPassword().equals(password)) { // login successful
+        User user = dataStore.userDao.getSignedUpUser(email, password);
+        if (user != null) { // login successful
             session.setAttribute("user", user);
             session.removeAttribute("loginError");
         } else { // login failed

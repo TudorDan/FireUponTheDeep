@@ -1,6 +1,7 @@
 package com.codecool.shop.dao.memory;
 
 import com.codecool.shop.dao.UserDao;
+import com.codecool.shop.model.Address;
 import com.codecool.shop.model.User;
 
 import java.util.ArrayList;
@@ -10,7 +11,9 @@ public class UserDaoMem implements UserDao {
     private final List<User> data = new ArrayList<>();
     private static UserDaoMem instance = null;
 
-    private UserDaoMem() {}
+    private UserDaoMem() {
+    }
+
     public static UserDaoMem getInstance() {
         if (instance == null) {
             instance = new UserDaoMem();
@@ -20,12 +23,28 @@ public class UserDaoMem implements UserDao {
 
     @Override
     public void add(User user) {
+        user.setId(data.size() + 1);
         data.add(user);
     }
 
     @Override
-    public User find(String email) {
-        return data.stream().filter(t -> t.getEmail().equals(email)).findFirst().orElse(null);
+    public boolean isSignedUp(String email) {
+        for(User user : data) {
+            if(user.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public User getSignedUpUser(String email, String password) {
+        for(User user : data) {
+            if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -34,8 +53,16 @@ public class UserDaoMem implements UserDao {
     }
 
     @Override
-    public void replace(User oldUser, User newUser) {
-        data.remove(oldUser);
-        data.add(newUser);
+    public void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping) {
+        for(User old : data) {
+            if(user.getId() == old.getId()) {
+                old.setName(name);
+                old.setEmail(email);
+                old.setPassword(password);
+                old.setPhoneNumber(phone);
+                old.setBilling(billing);
+                old.setShipping(shipping);
+            }
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.codecool.shop.dao;
 
+import com.codecool.shop.model.Address;
 import com.codecool.shop.model.User;
 
 public interface UserDao {
     void add(User user);
-    User find(String email);
+    boolean isSignedUp(String email);
+    User getSignedUpUser(String email, String password);
     void remove(User user);
-    void replace(User oldUser, User newUser);
+    void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping);
 }

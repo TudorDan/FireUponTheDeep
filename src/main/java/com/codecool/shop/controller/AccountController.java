@@ -34,12 +34,17 @@ public class AccountController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
+
         engine.process("account.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
 
         //get new data
@@ -56,15 +61,12 @@ public class AccountController extends HttpServlet {
         String ShipZipcode = req.getParameter("ShipZipcode");
         String ShipStreetAddress = req.getParameter("ShipStreetAddress");
 
-        //create new user
+        //update user
         Address billing = new Address(BillCountry, BillCity, BillZipcode, BillStreetAddress);
         Address shipping = new Address(ShipCountry, ShipCity, ShipZipcode, ShipStreetAddress);
-        User newUser = new User(name, email, password, phone, billing, shipping);
-
-        //replace the old
-        User oldUser = (User) session.getAttribute("user");
-        dataStore.userDao.replace(oldUser, newUser);
-        session.setAttribute("user", newUser);
+        User user = (User) session.getAttribute("user");
+        dataStore.userDao.updateUser(user, name, email, password, phone, billing, shipping);
+        session.setAttribute("user", user);
 
         //send context to template
         engine.process("account.html", context, resp.getWriter());

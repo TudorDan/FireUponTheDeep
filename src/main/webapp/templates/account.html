@@ -19,7 +19,7 @@
                                             <h2 class="text-info">Account info</h2>
                                             <p th:text="${session.user} == null ? 'Hello Guest, log in or sign up to access this page' : 'Hello ' + ${session.user.getName()} + '!'"></p>
                                         </div>
-                                        <form th:if="${session.user} != null" method="post" action="account.html">
+                                        <form th:if="${session.user} != null" method="post" action="account.html" accept-charset="utf-8">
                                             <section class="clean-form">
                                                 <h3>User data</h3>
                                                 <div class="container">
@@ -46,19 +46,19 @@
                                                 <div class="container">
                                                     <div class="form-group">
                                                         <label for="BillCountry">Country</label>
-                                                        <input class="form-control item" type="text" id="BillCountry" name="BillCountry" th:value="${session.user.getBilling().getCountry()}">
+                                                        <input class="form-control item" type="text" id="BillCountry" name="BillCountry" th:value="${session.user.getBilling()}?${session.user.getBilling().getCountry()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="BillCity">City</label>
-                                                        <input class="form-control item" type="text" id="BillCity" name="BillCity" th:value="${session.user.getBilling().getCity()}">
+                                                        <input class="form-control item" type="text" id="BillCity" name="BillCity" th:value="${session.user.getBilling()}?${session.user.getBilling().getCity()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="BillZipcode">Zip Code</label>
-                                                        <input class="form-control item" type="text" id="BillZipcode" name="BillZipcode" th:value="${session.user.getBilling().getZipcode()}">
+                                                        <input class="form-control item" type="text" id="BillZipcode" name="BillZipcode" th:value="${session.user.getBilling()}?${session.user.getBilling().getZipcode()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="BillStreetAddress">Street Address</label>
-                                                        <input class="form-control item" type="text" id="BillStreetAddress" name="BillStreetAddress" th:value="${session.user.getBilling().getHomeAddress()}">
+                                                        <input class="form-control item" type="text" id="BillStreetAddress" name="BillStreetAddress" th:value="${session.user.getBilling()}?${session.user.getBilling().getHomeAddress()}">
                                                     </div>
                                                 </div>
                                             </section>
@@ -67,19 +67,19 @@
                                                 <div class="container">
                                                     <div class="form-group">
                                                         <label for="ShipCountry">Country</label>
-                                                        <input class="form-control item" type="text" id="ShipCountry" name="ShipCountry" required th:value="${session.user.getShipping().getCountry()}">
+                                                        <input class="form-control item" type="text" id="ShipCountry" name="ShipCountry" required th:value="${session.user.getShipping()}?${session.user.getShipping().getCountry()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="ShipCity">City</label>
-                                                        <input class="form-control item" type="text" id="ShipCity" name="ShipCity" required th:value="${session.user.getShipping().getCity()}">
+                                                        <input class="form-control item" type="text" id="ShipCity" name="ShipCity" required th:value="${session.user.getShipping()}?${session.user.getShipping().getCity()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="ShipZipcode">Zip Code</label>
-                                                        <input class="form-control item" type="text" id="ShipZipcode" name="ShipZipcode" required th:value="${session.user.getShipping().getZipcode()}">
+                                                        <input class="form-control item" type="text" id="ShipZipcode" name="ShipZipcode" required th:value="${session.user.getShipping()}?${session.user.getShipping().getZipcode()}">
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="ShipStreetAddress">Street Address</label>
-                                                        <input class="form-control item" type="text" id="ShipStreetAddress" name="ShipStreetAddress" th:value="${session.user.getShipping().getHomeAddress()}">
+                                                        <input class="form-control item" type="text" id="ShipStreetAddress" name="ShipStreetAddress" th:value="${session.user.getShipping()}?${session.user.getShipping().getHomeAddress()}">
                                                     </div>
                                                 </div>
                                             </section>

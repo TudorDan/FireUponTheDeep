@@ -34,12 +34,17 @@ public class SignupController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
+
         engine.process("signup.html", context, resp.getWriter());
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
 
         //get post parameters
@@ -48,14 +53,12 @@ public class SignupController extends HttpServlet {
         String password = req.getParameter("password");
         String phone = req.getParameter("phone");
 
-        //check if email already exists
-        User user = dataStore.userDao.find(email);
-        if (user != null) { //email already used
+        //check if user is already registered
+        if (dataStore.userDao.isSignedUp(email)) {
             session.removeAttribute("user");
             session.setAttribute("signupError", "Email already used in another account. Use another email for this account.");
-        } else {
-            //add new user
-            user = new User(name, email, password, phone, null, null);
+        } else { //add new user
+            User user = new User(name, email, password, phone, null, null);
             dataStore.userDao.add(user);
 
             //update session
@@ -66,7 +69,8 @@ public class SignupController extends HttpServlet {
             String subject = "[CodeCoolShop] Welcome to our shop!";
             String message = "Your account was successfully created:" +
                     "\nmail: " + email +
-                    "\npassword: " + password;
+                    "\npassword: " + password +
+                    "\n\nFor a better shopping experience update your billing info.";
             (new Mailer("pythonsendmailtest75@gmail.com", "lpiiamlxlfsnzwxs", email, subject, message)).start();
         }
 

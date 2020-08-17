@@ -7,6 +7,7 @@ public class User {
     private String phoneNumber;
     private Address billing;
     private Address shipping;
+    private int id;
 
     public User(String name, String email, String password, String phoneNumber, Address billing, Address shipping) {
         this.name = name;
@@ -14,10 +15,18 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.billing = billing;
-        if(shipping == null)
+        if(shipping == null && billing != null)
             this.shipping = billing;
         else
             this.shipping = shipping;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
