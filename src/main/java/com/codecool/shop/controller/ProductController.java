@@ -1,12 +1,7 @@
 package com.codecool.shop.controller;
 
 import com.codecool.shop.config.Template;
-import com.codecool.shop.dao.CategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
-import com.codecool.shop.dao.implementation.CategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Category;
 import com.codecool.shop.model.Supplier;
 import org.thymeleaf.TemplateEngine;
@@ -23,31 +18,28 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //access data stores
-        ProductDao productDataStore = ProductDaoMem.getInstance();
-        CategoryDao categoryDataStore = CategoryDaoMem.getInstance();
-        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        DataStore dataStore = DataStore.getInstance();
 
         //get and add categories and suppliers to context
         TemplateEngine engine = Template.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
-        context.setVariable("categories", categoryDataStore.getAll());
-        context.setVariable("suppliers", supplierDataStore.getAll());
+        context.setVariable("categories", dataStore.categoryDao.getAll());
+        context.setVariable("suppliers", dataStore.supplierDao.getAll());
 
         //get filtered products
         String categoryId = req.getParameter("category");
         String supplierId = req.getParameter("supplier");
         if (categoryId != null) {
             //category filter applied
-            Category category = categoryDataStore.find(Integer.parseInt(categoryId));
-            context.setVariable("products", productDataStore.getBy(category));
+            Category category = dataStore.categoryDao.find(Integer.parseInt(categoryId));
+            context.setVariable("products", dataStore.productDao.getBy(category));
         } else if (supplierId != null) {
             //supplier filter applied
-            Supplier supplier = supplierDataStore.find(Integer.parseInt(supplierId));
-            context.setVariable("products", productDataStore.getBy(supplier));
+            Supplier supplier = dataStore.supplierDao.find(Integer.parseInt(supplierId));
+            context.setVariable("products", dataStore.productDao.getBy(supplier));
         } else
             //no filter
-            context.setVariable("products", productDataStore.getAll());
+            context.setVariable("products", dataStore.productDao.getAll());
 
         //send context to template
         engine.process("index.html", context, resp.getWriter());
