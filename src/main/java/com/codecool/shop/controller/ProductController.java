@@ -90,15 +90,18 @@ public class ProductController extends HttpServlet {
         String supplierId = (String) session.getAttribute("supplier");
         applyFilters(categoryId, supplierId);
 
-        //get product by posted id
-        int id = Integer.parseInt(req.getParameter("productId"));
-        Product product = dataStore.productDao.find(id);
+        String productId = req.getParameter("productId");
+        if (productId != null) { //if product added to cart
+            //get product by posted id
+            int id = Integer.parseInt(productId);
+            Product product = dataStore.productDao.find(id);
 
-        //add product to cart
-        cart.addProduct(product, product.getCurrentPrice());
+            //add product to cart
+            cart.addProduct(product, product.getCurrentPrice());
 
-        //update cart in session
-        session.setAttribute("cart", cart);
+            //update cart in session
+            session.setAttribute("cart", cart);
+        }
 
         //send context to template
         engine.process("index.html", context, resp.getWriter());

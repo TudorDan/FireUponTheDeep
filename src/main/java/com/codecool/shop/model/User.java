@@ -8,17 +8,22 @@ public class User {
     private Address billing;
     private Address shipping;
     private int id;
+    private final UserStatus userStatus;
 
-    public User(String name, String email, String password, String phoneNumber, Address billing, Address shipping) {
+    public User(String name, String email, String password, String phoneNumber, Address billing, Address shipping, UserStatus userStatus) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.billing = billing;
+        this.shipping = shipping;
+        this.userStatus = userStatus;
+
+        //assume shipping = billing if only one present
         if(shipping == null && billing != null)
             this.shipping = billing;
-        else
-            this.shipping = shipping;
+        if(shipping != null && billing == null)
+            this.billing = shipping;
     }
 
     public int getId() {
@@ -76,4 +81,6 @@ public class User {
     public void setShipping(Address shipping) {
         this.shipping = shipping;
     }
+
+    public UserStatus getUserStatus() { return userStatus; }
 }

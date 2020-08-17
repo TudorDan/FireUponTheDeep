@@ -2,10 +2,12 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.config.Template;
 import com.codecool.shop.dao.DataStore;
-import com.codecool.shop.model.Cart;
+import com.codecool.shop.model.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +31,7 @@ public class CheckoutController extends HttpServlet {
 
         //create shopping cart if not present
         cart = (Cart) session.getAttribute("cart");
-        if(cart == null) {
+        if (cart == null) {
             cart = new Cart();
             session.setAttribute("cart", cart);
         }
@@ -44,35 +46,59 @@ public class CheckoutController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
-/*
-        //get new data
-        String name = req.getParameter("name");
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String phone = req.getParameter("phone");
-        String BillCountry = req.getParameter("BillCountry");
-        String BillCity = req.getParameter("BillCity");
-        String BillZipcode = req.getParameter("BillZipcode");
-        String BillStreetAddress = req.getParameter("BillStreetAddress");
-        String ShipCountry = req.getParameter("ShipCountry");
-        String ShipCity = req.getParameter("ShipCity");
-        String ShipZipcode = req.getParameter("ShipZipcode");
-        String ShipStreetAddress = req.getParameter("ShipStreetAddress");
 
-        //create new user
-        Address billing = new Address(BillCountry, BillCity, BillZipcode, BillStreetAddress);
-        Address shipping = new Address(ShipCountry, ShipCity, ShipZipcode, ShipStreetAddress);
-        User newUser = new User(name, email, password, phone, billing, shipping);
+        if (cart.getNumberOfItems() > 0) {
+            //get form data
+            String name = req.getParameter("name");
+            String email = req.getParameter("email");
+            String phone = req.getParameter("phone");
+            String BillCountry = req.getParameter("BillCountry");
+            String BillCity = req.getParameter("BillCity");
+            String BillZipcode = req.getParameter("BillZipcode");
+            String BillStreetAddress = req.getParameter("BillStreetAddress");
+            String ShipCountry = req.getParameter("ShipCountry");
+            String ShipCity = req.getParameter("ShipCity");
+            String ShipZipcode = req.getParameter("ShipZipcode");
+            String ShipStreetAddress = req.getParameter("ShipStreetAddress");
 
-        //replace the old
-        User oldUser = (User) session.getAttribute("user");
-        dataStore.userDao.replace(oldUser, newUser);
-        session.setAttribute("user", newUser);
-*/
+            //process user data
+            User user = (User) session.getAttribute("user");
+            Address bill = new Address(BillCountry, BillCity, BillZipcode, BillStreetAddress);
+            Address ship = new Address(ShipCountry, ShipCity, ShipZipcode, ShipStreetAddress);
+
+            //user is not logged in
+            if (user == null) {
+                User unsignedUser = new User(name, email, null, phone, bill, ship, UserStatus.UNSIGNED);
+                dataStore.userDao.add(unsignedUser);
+                session.setAttribute("unsignedUser", unsignedUser);
+            }
+            //user is logged in
+            else {
+                //user is missing billing info
+                if (user.getBilling() == null) {
+                    //use form data to update billing info
+                    user.setBilling(bill);
+                    user.setShipping(ship);
+                }
+            }
+
+            //add new order
+            Order order = new Order(cart, user);
+            dataStore.orderDao.add(order);
+            session.setAttribute("order", order);
+
+            //empty the cart and update session
+            session.setAttribute("cart", new Cart());
+
+            //redirect to payment page
+            RequestDispatcher requestDispatcher = req.getRequestDispatcher("payment.html");
+            requestDispatcher.forward(req, resp);
+        }
+
         //send context to template
         engine.process("checkout.html", context, resp.getWriter());
     }

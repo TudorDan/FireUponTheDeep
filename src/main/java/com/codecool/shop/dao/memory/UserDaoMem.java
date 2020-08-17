@@ -3,6 +3,7 @@ package com.codecool.shop.dao.memory;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.Address;
 import com.codecool.shop.model.User;
+import com.codecool.shop.model.UserStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +30,22 @@ public class UserDaoMem implements UserDao {
 
     @Override
     public boolean isSignedUp(String email) {
-        for(User user : data) {
-            if(user.getEmail().equals(email)) {
-                return true;
-            }
-        }
-        return false;
+        return getSignedUserByMail(email) != null ;
     }
 
     @Override
-    public User getSignedUpUser(String email, String password) {
+    public User getAuthenticatedUser(String email, String password) {
         for(User user : data) {
             if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private User getSignedUserByMail(String email) {
+        for(User user : data) {
+            if(user.getEmail().equals(email) && user.getUserStatus() == UserStatus.SIGNED) {
                 return user;
             }
         }

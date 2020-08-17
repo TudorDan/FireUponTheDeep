@@ -1,4 +1,4 @@
-package com.codecool.shop.email;
+package com.codecool.shop.utilities;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

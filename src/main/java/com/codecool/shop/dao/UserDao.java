@@ -6,7 +6,7 @@ import com.codecool.shop.model.User;
 public interface UserDao {
     void add(User user);
     boolean isSignedUp(String email);
-    User getSignedUpUser(String email, String password);
+    User getAuthenticatedUser(String email, String password);
     void remove(User user);
     void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping);
 }

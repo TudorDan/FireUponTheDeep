@@ -68,4 +68,8 @@ public class Cart {
         }
         return 0;
     }
+
+    public void removeAllProducts() {
+        items.clear();
+    }
 }

@@ -2,8 +2,9 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.config.Template;
 import com.codecool.shop.dao.DataStore;
-import com.codecool.shop.email.Mailer;
 import com.codecool.shop.model.User;
+import com.codecool.shop.model.UserStatus;
+import com.codecool.shop.utilities.Mailer;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -58,7 +59,7 @@ public class SignupController extends HttpServlet {
             session.removeAttribute("user");
             session.setAttribute("signupError", "Email already used in another account. Use another email for this account.");
         } else { //add new user
-            User user = new User(name, email, password, phone, null, null);
+            User user = new User(name, email, password, phone, null, null, UserStatus.SIGNED);
             dataStore.userDao.add(user);
 
             //update session

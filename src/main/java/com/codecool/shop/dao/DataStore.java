@@ -1,21 +1,19 @@
 package com.codecool.shop.dao;
 
-import com.codecool.shop.dao.memory.CategoryDaoMem;
-import com.codecool.shop.dao.memory.ProductDaoMem;
-import com.codecool.shop.dao.memory.SupplierDaoMem;
-import com.codecool.shop.dao.memory.UserDaoMem;
+import com.codecool.shop.dao.memory.*;
 
 /**
  * Abstraction layer for easy selection of DAO implementation
  */
 public class DataStore {
-    private DaoImplementations daoImplementation = null;
+    private DaoImplementations daoImplementation;
 
     //DAOs
     public CategoryDao categoryDao;
     public SupplierDao supplierDao;
     public ProductDao productDao;
     public UserDao userDao;
+    public OrderDao orderDao;
 
     private static DataStore instance = null;
 
@@ -32,12 +30,14 @@ public class DataStore {
                 supplierDao = SupplierDaoMem.getInstance();
                 productDao = ProductDaoMem.getInstance();
                 userDao = UserDaoMem.getInstance();
+                orderDao = OrderDaoMem.getInstance();
                 break;
             case DATABASE:
                 categoryDao = null;
                 supplierDao = null;
                 productDao = null;
                 userDao = null;
+                orderDao = null;
                 break;
         }
     }
