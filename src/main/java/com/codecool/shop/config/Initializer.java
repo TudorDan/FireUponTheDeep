@@ -39,10 +39,10 @@ public class Initializer implements ServletContextListener {
         dataStore.productDao.add(product3);
 
         //setting up users
-        Address address1 = new Address("Romania", "Bistrita", "420070", "str. Fericirii, nr. 14");
-        Address address2 = new Address("Poland", "Warsav", "430070", "Happiness str., no. 15");
-        User user1 = new User("Tudor Dan", "tudor_ist@gmail.com", "1234", "1234567890", address1, address1);
-        User user2 = new User("Pop Ion", "pop_ion@gmail.com", "2345", "0123456789", address2, null);
+        Address address1 = new Address("Romania", "Bistrita", "420010", "str. Vasile Alecsandri, nr. 6");
+        Address address2 = new Address("Poland", "Warsaw", "430070", "Happiness str., no. 15");
+        User user1 = new User("Tudor Dan", "tudor_ist@gmail.com", "1234", "1234567890", address1, null);
+        User user2 = new User("Pop Ion", "pop_ion@gmail.com", "2345", "0123456789", address2, address2);
         dataStore.userDao.add(user1);
         dataStore.userDao.add(user2);
     }

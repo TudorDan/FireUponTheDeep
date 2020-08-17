@@ -14,7 +14,10 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.billing = billing;
-        this.shipping = shipping;
+        if(shipping == null)
+            this.shipping = billing;
+        else
+            this.shipping = shipping;
     }
 
     public String getName() {

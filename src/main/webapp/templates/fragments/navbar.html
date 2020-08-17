@@ -19,14 +19,20 @@
                         Shopping Cart (<span th:text="${session.cart}?${session.cart.getNumberOfItems()}:'0'"></span>)
                     </a>
                 </li>
+                <li th:if="${session.cart} and ${session.cart.getNumberOfItems()} > 0" class="nav-item" role="presentation">
+                    <a class="nav-link active" href="checkout.html">Checkout</a>
+                </li>
                 <li th:if="${session.user == null}" class=" nav-item" role="presentation">
                     <a class="nav-link" href="login.html">Login</a>
+                </li>
+                <li th:if="${session.user == null}" class="nav-item" role="presentation">
+                    <a class="nav-link" href="signup.html">Sign up</a>
                 </li>
                 <li th:if="${session.user != null}" class=" nav-item" role="presentation">
                     <a class="nav-link" href="logout.html">Logout</a>
                 </li>
-                <li th:if="${session.user == null}" class="nav-item" role="presentation">
-                    <a class="nav-link" href="signup.html">Sign up</a>
+                <li th:if="${session.user != null}" class=" nav-item" role="presentation">
+                    <a class="nav-link" href="account.html">Billing info</a>
                 </li>
             </ul>
         </div>

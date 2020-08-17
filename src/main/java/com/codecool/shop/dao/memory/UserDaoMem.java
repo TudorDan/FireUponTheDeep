@@ -27,4 +27,15 @@ public class UserDaoMem implements UserDao {
     public User find(String email) {
         return data.stream().filter(t -> t.getEmail().equals(email)).findFirst().orElse(null);
     }
+
+    @Override
+    public void remove(User user) {
+        data.remove(user);
+    }
+
+    @Override
+    public void replace(User oldUser, User newUser) {
+        data.remove(oldUser);
+        data.add(newUser);
+    }
 }
