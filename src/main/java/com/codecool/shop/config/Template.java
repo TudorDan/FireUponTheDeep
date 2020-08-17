@@ -13,11 +13,21 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
  * Thymeleaf configuration.
  */
 @WebListener
-public class ThymeleafConfig implements ServletContextListener {
+public class Template implements ServletContextListener {
+
+    private static final String TEMPLATE_ENGINE_ATTR = "com.thymeleafexamples.thymeleaf3.TemplateEngineInstance";
+
+    public static void storeTemplateEngine(ServletContext context, TemplateEngine engine) {
+        context.setAttribute(TEMPLATE_ENGINE_ATTR, engine);
+    }
+
+    public static TemplateEngine getTemplateEngine(ServletContext context) {
+        return (TemplateEngine) context.getAttribute(TEMPLATE_ENGINE_ATTR);
+    }
 
     public void contextInitialized(ServletContextEvent sce) {
         TemplateEngine engine = templateEngine(sce.getServletContext());
-        TemplateEngineUtil.storeTemplateEngine(sce.getServletContext(), engine);
+        Template.storeTemplateEngine(sce.getServletContext(), engine);
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

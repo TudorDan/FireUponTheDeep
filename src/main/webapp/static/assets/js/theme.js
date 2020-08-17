@@ -1,4 +1,4 @@
-// Custome theme code
+// Custom theme code
 
 if ($('.clean-gallery').length > 0) {
    baguetteBox.run('.clean-gallery', { animation: 'slideIn'});
@@ -13,7 +13,7 @@ if ($('.clean-product').length > 0) {
 
 // STUDENT CODE
 const url_api = 'http://localhost:8888/';
-const url_shopping_cart = url_api + 'shopping-cart.html';
+const url_shopping_cart = url_api + 'shopping-cart';
 
 async function updateQuantity() {
     let prodQuantity = this.value;
@@ -40,5 +40,4 @@ for (let quantityInput of quantityInputs) {
     quantityInput.addEventListener("click", updateQuantity);
 }
 
-// console.log("AICI");
 

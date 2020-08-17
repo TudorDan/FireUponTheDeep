@@ -6,15 +6,22 @@ public class Product extends BaseModel {
 
     private float defaultPrice;
     private Currency defaultCurrency;
-    private ProductCategory productCategory;
+    private Category category;
     private Supplier supplier;
+    private final String imageFileName;
 
 
-    public Product(String name, float defaultPrice, String currencyString, String description, ProductCategory productCategory, Supplier supplier) {
+    public Product(String name, float defaultPrice, String currencyString, String description, String imageFileName,
+                   Category category, Supplier supplier) {
         super(name, description);
         this.setPrice(defaultPrice, currencyString);
         this.setSupplier(supplier);
-        this.setProductCategory(productCategory);
+        this.setCategory(category);
+        this.imageFileName = imageFileName;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
     }
 
     public float getDefaultPrice() {
@@ -34,7 +41,7 @@ public class Product extends BaseModel {
     }
 
     public String getPrice() {
-        return this.defaultPrice + " " + this.defaultCurrency.toString();
+        return String.format("%1$.2f", this.defaultPrice) + " " + this.defaultCurrency.toString();
     }
 
     public void setPrice(float price, String currency) {
@@ -42,13 +49,13 @@ public class Product extends BaseModel {
         this.defaultCurrency = Currency.getInstance(currency);
     }
 
-    public ProductCategory getProductCategory() {
-        return productCategory;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-        this.productCategory.addProduct(this);
+    public void setCategory(Category category) {
+        this.category = category;
+        this.category.addProduct(this);
     }
 
     public Supplier getSupplier() {
@@ -64,15 +71,15 @@ public class Product extends BaseModel {
     public String toString() {
         return String.format("id: %1$d, " +
                         "name: %2$s, " +
-                        "defaultPrice: %3$f, " +
+                        "defaultPrice: %3$.2f, " +
                         "defaultCurrency: %4$s, " +
-                        "productCategory: %5$s, " +
+                        "category: %5$s, " +
                         "supplier: %6$s",
                 this.id,
                 this.name,
                 this.defaultPrice,
                 this.defaultCurrency.toString(),
-                this.productCategory.getName(),
+                this.category.getName(),
                 this.supplier.getName());
     }
 }
