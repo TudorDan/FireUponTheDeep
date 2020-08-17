@@ -18,13 +18,15 @@ public class LoginController extends HttpServlet {
     DataStore dataStore;
     TemplateEngine engine;
     WebContext context;
+    HttpSession session;
 
     private void setData(HttpServletRequest req, HttpServletResponse resp) {
         dataStore = DataStore.getInstance();
-
-        //get and add categories and suppliers to context (for sidebar)
+        session = req.getSession();
         engine = Template.getTemplateEngine(req.getServletContext());
         context = new WebContext(req, resp, req.getServletContext());
+
+        //get and add categories and suppliers to context (for sidebar)
         context.setVariable("categories", dataStore.categoryDao.getAll());
         context.setVariable("suppliers", dataStore.supplierDao.getAll());
     }
@@ -32,8 +34,6 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         setData(req, resp);
-
-        //send context to template
         engine.process("login.html", context, resp.getWriter());
     }
 
@@ -47,13 +47,12 @@ public class LoginController extends HttpServlet {
 
         //check login data and store user in session if ok
         User user = dataStore.userDao.find(email);
-        HttpSession session = req.getSession();
         if (user != null && user.getPassword().equals(password)) { // login successful
             session.setAttribute("user", user);
-            session.removeAttribute("error");
+            session.removeAttribute("loginError");
         } else { // login failed
             session.removeAttribute("user");
-            session.setAttribute("error", true);
+            session.setAttribute("loginError", true);
         }
 
         //send context to template

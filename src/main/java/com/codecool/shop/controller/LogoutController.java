@@ -13,20 +13,35 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(urlPatterns = {"/logout.html"})
-public class LogOutController extends HttpServlet {
+public class LogoutController extends HttpServlet {
+    DataStore dataStore;
+    TemplateEngine engine;
+    WebContext context;
+    HttpSession session;
+
+    private void setData(HttpServletRequest req, HttpServletResponse resp) {
+        dataStore = DataStore.getInstance();
+        session = req.getSession();
+        engine = Template.getTemplateEngine(req.getServletContext());
+        context = new WebContext(req, resp, req.getServletContext());
+
+        //get and add categories and suppliers to context (for sidebar)
+        context.setVariable("categories", dataStore.categoryDao.getAll());
+        context.setVariable("suppliers", dataStore.supplierDao.getAll());
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        DataStore dataStore = DataStore.getInstance();
+        setData(req, resp);
 
         //get and add categories and suppliers to context (for sidebar)
-        TemplateEngine engine = Template.getTemplateEngine(req.getServletContext());
-        WebContext context = new WebContext(req, resp, req.getServletContext());
         context.setVariable("categories", dataStore.categoryDao.getAll());
         context.setVariable("suppliers", dataStore.supplierDao.getAll());
 
-        HttpSession session = req.getSession();
+        //clean session
         session.removeAttribute("user");
+        session.removeAttribute("loginError");
+        session.removeAttribute("signupError");
 
         //send context to template
         engine.process("logout.html", context, resp.getWriter());

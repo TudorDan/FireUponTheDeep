@@ -18,7 +18,7 @@
                                         <div class="block-heading">
                                             <h2 class="text-info">Log In</h2>
                                             <p th:text="${session.user} == null ? 'Hello Guest, please input your log in data:' : 'Hello ' + ${session.user.getName()} + ', you are loged in. Happy shopping!'"></p>
-                                            <p th:if="${session.error}" class="alert-danger">Wrong email or password. Try again...</p>
+                                            <p th:if="${session.loginError}" class="alert-danger">Wrong email or password. Try again...</p>
                                         </div>
                                         <form th:if="${session.user} == null" method="post" action="login.html">
                                             <div class="form-group">

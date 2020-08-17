@@ -2,6 +2,7 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.config.Template;
 import com.codecool.shop.dao.DataStore;
+import com.codecool.shop.email.Mailer;
 import com.codecool.shop.model.User;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -52,11 +53,21 @@ public class SignupController extends HttpServlet {
         if (user != null) { //email already used
             session.removeAttribute("user");
             session.setAttribute("signupError", "Email already used in another account. Use another email for this account.");
-        } else { //new user
+        } else {
+            //add new user
             user = new User(name, email, password, phone, null, null);
             dataStore.userDao.add(user);
+
+            //update session
             session.setAttribute("user", user);
             session.removeAttribute("signupError");
+
+            //send welcome mail
+            String subject = "[CodeCoolShop] Welcome to our shop!";
+            String message = "Your account was successfully created:" +
+                    "\nmail: " + email +
+                    "\npassword: " + password;
+            (new Mailer("pythonsendmailtest75@gmail.com", "lpiiamlxlfsnzwxs", email, subject, message)).start();
         }
 
         //send context to template

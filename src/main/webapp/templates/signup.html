@@ -17,7 +17,7 @@
                                     <div class="container">
                                         <div class="block-heading">
                                             <h2 class="text-info">Sign up</h2>
-                                            <p th:text="${session.user} == null ? 'Hello Guest, please input your sign up data:' : 'Hello ' + ${session.user.getName()} + ', you are registered. Happy shopping!'"></p>
+                                            <p th:text="${session.user} == null ? 'Hello Guest, please input your sign up data:' : 'Hello ' + ${session.user.getName()} + ', you are registered and logged in. Happy shopping!'"></p>
                                             <p th:if="${session.signupError}" th:text="${session.signupError}"
                                                class="alert-danger">Wrong data. Try again...</p>
                                         </div>
