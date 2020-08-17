@@ -47,18 +47,12 @@
                             <div class="summary">
                                 <h3>Summary</h3>
                                 <h4>
-                                    <span class="text">Subtotal</span>
-                                    <span class="price" th:text="${session.cart.getTotalPrice().toString()}">360 USD</span>
-                                </h4>
-                                <h4><span class="text">Discount</span><span class="price">$0</span></h4>
-                                <h4><span class="text">Shipping</span><span class="price">$0</span></h4>
-                                <h4>
                                     <span class="text">Total</span>
                                     <span class="price" th:text="${session.cart.getTotalPrice().toString()}">360 USD</span>
                                 </h4>
-                                <button class="btn btn-primary btn-block btn-lg" type="button">
-                                    <a href="" style="color: white">Checkout</a>
-                                </button>
+                                <a href="" style="color: white; text-decoration: none">
+                                    <button class="btn btn-primary btn-block btn-lg" type="button">Checkout</button>
+                                </a>
                             </div>
                         </div>
                     </div>

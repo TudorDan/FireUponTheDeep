@@ -51,8 +51,6 @@ public class CartController extends HttpServlet {
         //get parameters
         String quantityParameter = req.getParameter("quantity");
         String productIdParameter = req.getParameter("productId");
-        System.out.println("quantity: " + quantityParameter);
-        System.out.println("product: " + productIdParameter);
 
         //update cart
         if(quantityParameter != null) { //quantity modified in form - update cart
