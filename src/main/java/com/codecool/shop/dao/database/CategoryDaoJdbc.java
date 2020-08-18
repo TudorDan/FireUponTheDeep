@@ -63,7 +63,6 @@ public class CategoryDaoJdbc implements CategoryDao {
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
             if(result.next()) {
-                id = result.getInt("id");
                 String name = result.getString("name");
                 String department = result.getString("department");
                 String description = result.getString("description");
