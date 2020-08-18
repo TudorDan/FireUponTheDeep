@@ -6,6 +6,7 @@ import com.codecool.shop.model.Category;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -48,7 +49,29 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     public Category find(int id) {
-        // TODO: 18.08.2020 Category find(id)
+        String query = "SELECT id, name, department, description" +
+                " FROM categories" +
+                " WHERE id = ?";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                id = result.getInt("id");
+                String name = result.getString("name");
+                String department = result.getString("department");
+                String description = result.getString("description");
+                return new Category(id, name, department, description);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Category find error => " + exception.getMessage());
+        }
         return null;
     }
 
