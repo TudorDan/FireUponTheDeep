@@ -11,7 +11,6 @@ import java.io.IOException;
 public class DataStore {
     private DaoImplementations daoImplementation;
     private DatabaseManager databaseManager = null;
-    private String propFile;
 
     //DAOs
     public CategoryDao categoryDao;
@@ -47,7 +46,6 @@ public class DataStore {
     public void SetDatabase(String propFile) {
         try {
             databaseManager = DatabaseManager.getInstance(propFile);
-            this.propFile = propFile;
         } catch (IOException e) {
             System.err.println("ERROR: DatabaseManager initialization failed = " + e.getMessage());
             e.printStackTrace();

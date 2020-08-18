@@ -29,10 +29,7 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public void add(Supplier supplier) {
-        String query = "INSERT INTO suppliers (" +
-                " name," +
-                " description ) VALUES (" +
-                "?, ?)";
+        String query = "INSERT INTO suppliers ( name, description ) VALUES (?, ?)";
 
         try {
             // set all the prepared statement parameters
@@ -52,12 +49,10 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public Supplier find(int id) {
-        String query = "SELECT" +
-                " id," +
-                " name," +
-                " description" +
+        String query = "SELECT id, name, description" +
                 " FROM suppliers" +
                 " WHERE id = ?";
+
         try {
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
@@ -81,16 +76,25 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public void remove(int id) {
-        // TODO: 18.08.2020 supplier remove(id)
+        String query = "DELETE FROM suppliers WHERE id = ?";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement delete
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+        }
     }
 
     @Override
     public List<Supplier> getAll() {
-        String query = "SELECT" +
-                " id," +
-                " name," +
-                " description" +
-                " FROM suppliers";
+        String query = "SELECT id, name, description FROM suppliers";
         List<Supplier> suppliers = new ArrayList<>();
 
         try {
