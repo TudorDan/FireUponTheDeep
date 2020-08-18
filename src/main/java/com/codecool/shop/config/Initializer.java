@@ -16,11 +16,15 @@ public class Initializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         DataStore dataStore = DataStore.getInstance();
 
-        //change parameter to "DaoImplementations.DATABASE" for database use
+        //use parameter to select data container:
+        // "DaoImplementations.DATABASE" for database storage
+        // "DaoImplementations.MEMORY" for memory storage
         dataStore.SetDaoImplementation(DaoImplementations.MEMORY);
 
         if(dataStore.getDaoImplementation() == DaoImplementations.DATABASE) {
-            //change parameter to "test_connection.properties" to use test database
+            //use parameter to select database:
+            // "main_connection.properties" to use codecoolshop database
+            // "test_connection.properties" to use test database
             dataStore.SetDatabase("main_connection.properties");
         }
 
