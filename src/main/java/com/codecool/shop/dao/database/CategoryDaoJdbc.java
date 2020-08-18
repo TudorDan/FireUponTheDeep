@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryDaoJdbc implements CategoryDao {
@@ -89,13 +90,33 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.executeUpdate();
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+            System.err.println("ERROR: Category remove error => " + exception.getMessage());
         }
     }
 
     @Override
     public List<Category> getAll() {
-        // TODO: 18.08.2020 Category getAll()
-        return null;
+        String query = "SELECT id, name, department, description FROM categories";
+        List<Category> categories = new ArrayList<>();
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                Integer id = result.getInt("id");
+                String name = result.getString("name");
+                String department = result.getString("department");
+                String description = result.getString("description");
+                categories.add(new Category(id, name, department, description));
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Category get all error => " + exception.getMessage());
+        }
+        return categories;
     }
 }

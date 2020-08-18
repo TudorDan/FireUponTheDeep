@@ -88,7 +88,7 @@ public class SupplierDaoJdbc implements SupplierDao {
             st.executeUpdate();
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+            System.err.println("ERROR: Supplier remove error => " + exception.getMessage());
         }
     }
 
