@@ -75,17 +75,22 @@ public class ProductDaoJdbc implements ProductDao {
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
             if(result.next()) {
-                id = result.getInt("id");
+                DataStore dataStore = DataStore.getInstance();
                 String name = result.getString("name");
                 String desc = result.getString("description");
                 String image = result.getString("image_file_name");
-                Integer supId = result.getInt("supplier_id");
-                Integer catId = result.getInt("category_id");
-                //return new Category(id, name, department, description);
+                int supId = result.getInt("supplier_id");
+                int catId = result.getInt("category_id");
+
+                List<Price> prices = getPricesById(id);
+                Supplier supplier = dataStore.supplierDao.find(supId);
+                Category category = dataStore.categoryDao.find(catId);
+
+                return new Product(id, name, desc, image, prices, category, supplier);
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Category find error => " + exception.getMessage());
+            System.err.println("ERROR: Product find error => " + exception.getMessage());
         }
         return null;
     }
@@ -112,7 +117,7 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Category find error => " + exception.getMessage());
+            System.err.println("ERROR: Product get prices error => " + exception.getMessage());
         }
         return prices;
     }

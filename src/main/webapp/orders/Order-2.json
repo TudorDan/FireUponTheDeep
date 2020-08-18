@@ -1,0 +1,18 @@
+{
+   "date": "Tue Aug 18 22:21:41 EEST 2020",
+   "total": "49.90 USD",
+   "shipping": {
+      "zipcode": "060903",
+      "country": "Romania",
+      "address": "sector 6, Orsova nr. 104,  block 2,  ap.8",
+      "city": "Bucharest"
+   },
+   "id": 2,
+   "user": "Tudor Dan Duzinschi",
+   "products": [{
+      "name": "Amazon Fire",
+      "quantity": "1",
+      "id": "1",
+      "supplier": "Amazon"
+   }]
+}
