@@ -62,7 +62,6 @@ public class SupplierDaoJdbc implements SupplierDao {
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
             if(result.next()) {
-                id = result.getInt("id");
                 String name = result.getString("name");
                 String description = result.getString("description");
                 return new Supplier(id, name, description);
@@ -112,7 +111,7 @@ public class SupplierDaoJdbc implements SupplierDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+            System.err.println("ERROR: Supplier get all error => " + exception.getMessage());
         }
         return suppliers;
     }
