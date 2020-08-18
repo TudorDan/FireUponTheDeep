@@ -77,7 +77,20 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     public void remove(int id) {
-        // TODO: 18.08.2020 Category remove(id)
+        String query = "DELETE FROM categories WHERE id = ?";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement delete
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+        }
     }
 
     @Override
