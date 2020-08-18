@@ -26,6 +26,9 @@ public class Initializer implements ServletContextListener {
             // "main_connection.properties" to use codecoolshop database
             // "test_connection.properties" to use test database
             dataStore.SetDatabase("main_connection.properties");
+
+            //[for testing] delete database before use
+            dataStore.getDatabaseManager().initDatabase();
         }
 
         //setting up suppliers
