@@ -21,6 +21,14 @@ public class Product extends BaseModel {
         this.imageFileName = imageFileName;
     }
 
+    public Product(Integer id, String name, String description, String imageFileName, List<Price> prices,
+                   Category category, Supplier supplier) {
+        super(id, name, description);
+        this.imageFileName = imageFileName;
+        this.category = category;
+        this.supplier = supplier;
+    }
+
     public String getImageFileName() {
         return imageFileName;
     }
