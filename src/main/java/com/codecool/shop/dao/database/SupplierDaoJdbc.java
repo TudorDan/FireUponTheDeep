@@ -6,7 +6,9 @@ import com.codecool.shop.model.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierDaoJdbc implements SupplierDao {
@@ -27,10 +29,10 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public void add(Supplier supplier) {
-        String query = "INSERT INTO suppliers ("
-                + " name,"
-                + " description ) VALUES ("
-                + "?, ?)";
+        String query = "INSERT INTO suppliers (" +
+                " name," +
+                " description ) VALUES (" +
+                "?, ?)";
 
         try {
             // set all the prepared statement parameters
@@ -50,6 +52,30 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public Supplier find(int id) {
+        String query = "SELECT" +
+                " id," +
+                " name," +
+                " description" +
+                " FROM suppliers" +
+                " WHERE id = ?";
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                id = result.getInt("id");
+                String name = result.getString("name");
+                String description = result.getString("description");
+                return new Supplier(id, name, description);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+        }
         return null;
     }
 
@@ -60,6 +86,30 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public List<Supplier> getAll() {
-        return null;
+        String query = "SELECT" +
+                " id," +
+                " name," +
+                " description" +
+                " FROM suppliers";
+        List<Supplier> suppliers = new ArrayList<>();
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                Integer id = result.getInt("id");
+                String name = result.getString("name");
+                String description = result.getString("description");
+                suppliers.add(new Supplier(id, name, description));
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Supplier find error => " + exception.getMessage());
+        }
+        return suppliers;
     }
 }
