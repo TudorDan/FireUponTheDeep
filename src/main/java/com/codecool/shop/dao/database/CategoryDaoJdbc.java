@@ -4,6 +4,9 @@ import com.codecool.shop.dao.CategoryDao;
 import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Category;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CategoryDaoJdbc implements CategoryDao {
@@ -24,7 +27,23 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     public void add(Category category) {
-        // TODO: 18.08.2020 add(Category)
+        String query = "INSERT INTO categories (name, department, description) VALUES (?, ?, ?)";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, category.getName());
+            st.setString(2, category.getDepartment());
+            st.setString(3, category.getDescription());
+
+            // execute the prepared statement insert
+            st.executeUpdate();
+            st.close();
+        }
+        catch (SQLException exception) {
+            System.err.println("ERROR: Category add error => " + exception.getMessage());
+        }
     }
 
     @Override
