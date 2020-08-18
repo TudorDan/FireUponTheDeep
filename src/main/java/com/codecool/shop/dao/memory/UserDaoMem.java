@@ -37,7 +37,7 @@ public class UserDaoMem implements UserDao {
     @Override
     public User getAuthenticatedUser(String email, String password) {
         for(User user : data) {
-            if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
+            if(user.getUserStatus() == UserStatus.SIGNED && user.getEmail().equals(email) && user.getPassword().equals(password)) {
                 return user;
             }
         }
