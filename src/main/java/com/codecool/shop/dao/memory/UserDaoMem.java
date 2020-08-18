@@ -2,6 +2,7 @@ package com.codecool.shop.dao.memory;
 
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.Address;
+import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.User;
 import com.codecool.shop.model.UserStatus;
 
@@ -69,5 +70,25 @@ public class UserDaoMem implements UserDao {
                 old.setShipping(shipping);
             }
         }
+    }
+
+    @Override
+    public void updateUserCart(User user, Cart cart) {
+        for(User old : data) {
+            if(user.getId() == old.getId()) {
+                old.setMyCart(cart);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public Cart getUserCart(User user) {
+        for(User old : data) {
+            if(user.getId() == old.getId()) {
+                return user.getMyCart();
+            }
+        }
+        return null;
     }
 }

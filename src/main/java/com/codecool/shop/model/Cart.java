@@ -5,7 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 public class Cart {
-    private final List<Item> items = new ArrayList<>();
+    private final List<Item> items;
+
+    //copy constructor
+    public Cart(Cart cart) {
+        items = new ArrayList<>();
+        for(Item item : cart.getItems()) {
+            items.add(new Item(item));
+        }
+    }
+
+    public Cart() {
+        items = new ArrayList<>();
+    }
 
     public void addProduct(Product product, Price price) {
         //search for product
@@ -67,9 +79,5 @@ public class Cart {
             }
         }
         return 0;
-    }
-
-    public void removeAllProducts() {
-        items.clear();
     }
 }

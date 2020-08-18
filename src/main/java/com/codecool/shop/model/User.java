@@ -9,6 +9,7 @@ public class User {
     private Address shipping;
     private int id;
     private final UserStatus userStatus;
+    private Cart myCart;
 
     public User(String name, String email, String password, String phoneNumber, Address billing, Address shipping, UserStatus userStatus) {
         this.name = name;
@@ -18,11 +19,12 @@ public class User {
         this.billing = billing;
         this.shipping = shipping;
         this.userStatus = userStatus;
+        myCart = new Cart();
 
         //assume shipping = billing if only one present
-        if(shipping == null && billing != null)
+        if (shipping == null && billing != null)
             this.shipping = billing;
-        if(shipping != null && billing == null)
+        if (shipping != null && billing == null)
             this.billing = shipping;
     }
 
@@ -83,4 +85,8 @@ public class User {
     }
 
     public UserStatus getUserStatus() { return userStatus; }
+
+    public void setMyCart(Cart cart) { myCart = new Cart(cart); }
+
+    public Cart getMyCart() { return myCart; }
 }

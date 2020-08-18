@@ -1,16 +1,26 @@
 package com.codecool.shop.model;
 
+import com.codecool.shop.utilities.Log;
+
+import java.util.Date;
+
 public class Order extends BaseModel{
     private final Cart cart;
     private final User user;
     private OrderStatus orderStatus;
+    private final Date date;
+    private final Log log;
 
     public Order(Cart cart, User user) {
         super("Order");
         this.cart = cart;
         this.user = user;
-        this.orderStatus = OrderStatus.CHECKED;
+        orderStatus = OrderStatus.CHECKED;
+        date = new Date();
+        log = new Log();
     }
+
+    public Log getLog() { return log; }
 
     public Cart getCart() {
         return cart;
@@ -20,9 +30,7 @@ public class Order extends BaseModel{
         return user;
     }
 
-    public void pay() {
-        orderStatus = OrderStatus.PAYED;
-    }
+    public void pay() { orderStatus = OrderStatus.PAID; }
 
     public void confirm() {
         orderStatus = OrderStatus.CONFIRMED;
@@ -32,5 +40,13 @@ public class Order extends BaseModel{
 
     public String getName() {
         return "Order-" + id;
+    }
+
+    public Date getDate() { return date; }
+
+    public OrderStatus getStatus() { return orderStatus; }
+
+    public void logEvent(Date date, String description) {
+        log.addEvent(date, description);
     }
 }

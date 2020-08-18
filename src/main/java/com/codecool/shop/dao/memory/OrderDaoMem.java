@@ -2,9 +2,11 @@ package com.codecool.shop.dao.memory;
 
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrderDaoMem implements OrderDao {
 
@@ -37,5 +39,12 @@ public class OrderDaoMem implements OrderDao {
                 break;
             }
         }
+    }
+
+    @Override
+    public List<Order> getOrdersOf(User user) {
+        if(user == null)
+            return null;
+        return data.stream().filter(order -> order.getUser().getId() == user.getId()).collect(Collectors.toList());
     }
 }

@@ -64,6 +64,8 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
 
         //get and apply filters from get parameters (URL)
@@ -83,6 +85,8 @@ public class ProductController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
 
         //get and apply filters from session
@@ -90,8 +94,9 @@ public class ProductController extends HttpServlet {
         String supplierId = (String) session.getAttribute("supplier");
         applyFilters(categoryId, supplierId);
 
+        //if product added to cart
         String productId = req.getParameter("productId");
-        if (productId != null) { //if product added to cart
+        if (productId != null) {
             //get product by posted id
             int id = Integer.parseInt(productId);
             Product product = dataStore.productDao.find(id);

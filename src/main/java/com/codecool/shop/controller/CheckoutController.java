@@ -3,6 +3,7 @@ package com.codecool.shop.controller;
 import com.codecool.shop.config.Template;
 import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.*;
+import com.codecool.shop.utilities.JSONFiler;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet(urlPatterns = {"/checkout.html"})
 public class CheckoutController extends HttpServlet {
@@ -22,12 +24,14 @@ public class CheckoutController extends HttpServlet {
     WebContext context;
     HttpSession session;
     Cart cart;
+    JSONFiler filer;
 
     private void setData(HttpServletRequest req, HttpServletResponse resp) {
         dataStore = DataStore.getInstance();
         session = req.getSession();
         engine = Template.getTemplateEngine(req.getServletContext());
         context = new WebContext(req, resp, req.getServletContext());
+        filer = new JSONFiler(getServletContext().getRealPath("/"));
 
         //create shopping cart if not present
         cart = (Cart) session.getAttribute("cart");
@@ -75,6 +79,7 @@ public class CheckoutController extends HttpServlet {
                 User unsignedUser = new User(name, email, null, phone, bill, ship, UserStatus.UNSIGNED);
                 dataStore.userDao.add(unsignedUser);
                 session.setAttribute("unsignedUser", unsignedUser);
+                user = unsignedUser;
             }
             //user is logged in
             else {
@@ -86,10 +91,16 @@ public class CheckoutController extends HttpServlet {
                 }
             }
 
-            //add new order
+            //create new order
             Order order = new Order(cart, user);
+
+            //add order to store and session
             dataStore.orderDao.add(order);
             session.setAttribute("order", order);
+
+            //log event and update log file
+            order.logEvent(new Date(), "Order created. Status = " + order.getStatus());
+            filer.writeOrderLog(order, "/logs");
 
             //empty the cart and update session
             session.setAttribute("cart", new Cart());

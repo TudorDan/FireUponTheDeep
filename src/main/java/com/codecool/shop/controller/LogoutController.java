@@ -32,6 +32,8 @@ public class LogoutController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
         setData(req, resp);
 
         //get and add categories and suppliers to context (for sidebar)
@@ -42,6 +44,10 @@ public class LogoutController extends HttpServlet {
         session.removeAttribute("user");
         session.removeAttribute("loginError");
         session.removeAttribute("signupError");
+        session.removeAttribute("saveTime");
+        session.removeAttribute("cart");
+        session.removeAttribute("order");
+        session.removeAttribute("orderName");
 
         //send context to template
         engine.process("logout.html", context, resp.getWriter());

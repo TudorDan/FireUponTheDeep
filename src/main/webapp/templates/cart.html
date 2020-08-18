@@ -10,8 +10,11 @@
                 <div class="block-heading">
                     <h2 class="text-info">Shopping Cart</h2>
                     <p>The cart contains <span th:text="${session.cart}?${session.cart.getNumberOfItems()}:'0'"></span> items</p>
+                    <p th:if="${session.cart and session.cart.getNumberOfItems()==0}">
+                        Add products to cart using the <a href="index.html">catalog</a>.
+                    </p>
                 </div>
-                <div class="content">
+                <div class="content" th:if="${session.cart and session.cart.getNumberOfItems()>0}">
                     <div class="row no-gutters">
                         <div class="col-md-12 col-lg-8">
                             <div class="items">
@@ -50,9 +53,15 @@
                                     <span class="text">Total</span>
                                     <span class="price" th:text="${session.cart.getTotalPrice().toString()}">360 USD</span>
                                 </h4>
-                                <a href="checkout.html" style="color: white; text-decoration: none" th:if="${session.cart.getNumberOfItems() > 0}">
+                                <a href="checkout.html" style="color: white; text-decoration: none">
                                     <button class="btn btn-primary btn-block btn-lg" type="button">Checkout</button>
                                 </a>
+                                <button th:if="${session.user}" class="btn btn-primary btn-block btn-lg" id="saveCart">
+                                    Save my cart
+                                </button>
+                                <p th:if="${session.saveTime and session.user}" class="text-center">
+                                    Cart saved in user account at <span th:text="${session.saveTime}">date</span>.
+                                </p>
                             </div>
                         </div>
                     </div>

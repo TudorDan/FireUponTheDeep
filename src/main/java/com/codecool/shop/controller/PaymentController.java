@@ -5,6 +5,7 @@ import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.User;
+import com.codecool.shop.utilities.JSONFiler;
 import com.codecool.shop.utilities.Mailer;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Date;
 
 @WebServlet(urlPatterns = {"/payment.html"})
 public class PaymentController extends HttpServlet {
@@ -25,12 +27,14 @@ public class PaymentController extends HttpServlet {
     WebContext context;
     HttpSession session;
     Cart cart;
+    JSONFiler filer;
 
     private void setData(HttpServletRequest req, HttpServletResponse resp) {
         dataStore = DataStore.getInstance();
         session = req.getSession();
         engine = Template.getTemplateEngine(req.getServletContext());
         context = new WebContext(req, resp, req.getServletContext());
+        filer = new JSONFiler(getServletContext().getRealPath("/"));
 
         //create shopping cart if not present
         cart = (Cart) session.getAttribute("cart");
@@ -88,9 +92,10 @@ public class PaymentController extends HttpServlet {
             if(paymentOK) {
                 //change order status
                 Order order = (Order) session.getAttribute("order");
+                order.pay();
                 dataStore.orderDao.setPayed(order);
 
-                //clean session
+                //update session
                 session.removeAttribute("order");
                 session.setAttribute("orderName", order.getName());
                 session.removeAttribute("paymentError");
@@ -107,6 +112,11 @@ public class PaymentController extends HttpServlet {
                 (new Mailer("pythonsendmailtest75@gmail.com", "lpiiamlxlfsnzwxs", user.getEmail(), subject, message)).start();
 
                 //save json file with order data
+                filer.writeOrder(order, "\\orders");
+
+                //log event and update log file
+                order.logEvent(new Date(), "Order payed. Status = " + order.getStatus());
+                filer.writeOrderLog(order, "\\logs");
 
                 //redirect to confirmation page
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("confirmation.html");

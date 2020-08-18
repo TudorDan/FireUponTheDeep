@@ -46,9 +46,9 @@ public class Mailer extends Thread {
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject(sub);
             message.setText(msg);
+
             // Send message
             Transport.send(message);
-            System.out.println("Message sent successfully");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

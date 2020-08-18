@@ -2,7 +2,7 @@ package com.codecool.shop.model;
 
 public enum OrderStatus {
     CHECKED,
-    PAYED,
+    PAID,
     CONFIRMED,
     SHIPPED
 }
