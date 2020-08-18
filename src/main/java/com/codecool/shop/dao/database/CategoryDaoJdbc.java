@@ -8,21 +8,23 @@ import java.util.List;
 public class CategoryDaoJdbc implements CategoryDao {
     @Override
     public void add(Category category) {
-
+        // TODO: 18.08.2020 add(Category)
     }
 
     @Override
     public Category find(int id) {
+        // TODO: 18.08.2020 Category find(id)
         return null;
     }
 
     @Override
     public void remove(int id) {
-
+        // TODO: 18.08.2020 Category remove(id)
     }
 
     @Override
     public List<Category> getAll() {
+        // TODO: 18.08.2020 Category getAll()
         return null;
     }
 }

@@ -81,7 +81,7 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public void remove(int id) {
-
+        // TODO: 18.08.2020 supplier remove(id)
     }
 
     @Override

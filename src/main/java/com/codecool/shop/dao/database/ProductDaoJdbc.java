@@ -58,26 +58,30 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public Product find(int id) {
+        // TODO: 18.08.2020 product find(id)
         return null;
     }
 
     @Override
     public void remove(int id) {
-
+        // TODO: 18.08.2020 product remove(id)
     }
 
     @Override
     public List<Product> getAll() {
+        // TODO: 18.08.2020 product getAll()
         return null;
     }
 
     @Override
     public List<Product> getBy(Supplier supplier) {
+        // TODO: 18.08.2020 product getBy(supplier)
         return null;
     }
 
     @Override
     public List<Product> getBy(Category category) {
+        // TODO: 18.08.2020 product getBy(category)
         return null;
     }
 }
