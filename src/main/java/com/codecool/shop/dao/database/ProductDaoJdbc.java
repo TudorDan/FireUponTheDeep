@@ -3,12 +3,16 @@ package com.codecool.shop.dao.database;
 import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.model.Category;
+import com.codecool.shop.model.Price;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductDaoJdbc implements ProductDao {
@@ -58,8 +62,59 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public Product find(int id) {
-        // TODO: 18.08.2020 product find(id)
+        String query = "SELECT id, name, description, image_file_name, supplier_id, category_id" +
+                " FROM products" +
+                " WHERE id = ?";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                id = result.getInt("id");
+                String name = result.getString("name");
+                String desc = result.getString("description");
+                String image = result.getString("image_file_name");
+                Integer supId = result.getInt("supplier_id");
+                Integer catId = result.getInt("category_id");
+                //return new Category(id, name, department, description);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Category find error => " + exception.getMessage());
+        }
         return null;
+    }
+
+    private List<Price> getPricesById(int id) {
+        String query = "SELECT sum, currency, date" +
+                " FROM prices" +
+                " WHERE product_id = ?";
+
+        List<Price> prices = new ArrayList<>();
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            while(result.next()) {
+                double sum = result.getDouble("sum");
+                String currency = result.getString("currency");
+                Date date = result.getDate("date");
+                prices.add(new Price(sum, currency, date));
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Category find error => " + exception.getMessage());
+        }
+        return prices;
     }
 
     @Override
