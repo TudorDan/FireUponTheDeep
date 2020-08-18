@@ -8,11 +8,11 @@ import java.util.Date;
  * (price evolution in time)
  */
 public class Price {
-    private float sum; //price of object
+    private double sum; //price of object
     private final Currency currency;
     private final Date date; //start date for price
 
-    public Price(float sum, String currency, Date date) {
+    public Price(double sum, String currency, Date date) {
         this.sum = sum;
         this.currency = Currency.getInstance(currency);
         this.date = date;
@@ -31,11 +31,11 @@ public class Price {
         return currency;
     }
 
-    public void setSum(float sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 
-    public float getSum() {
+    public double getSum() {
         return sum;
     }
 }
