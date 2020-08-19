@@ -25,7 +25,9 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     public void add(Category category) {
-        String query = "INSERT INTO categories (name, department, description) VALUES (?, ?, ?)";
+        String query = "INSERT INTO categories (name, department, description) " +
+                "VALUES (?, ?, ?) " +
+                "RETURNING id";
 
         try {
             //get DatabaseManager
@@ -38,8 +40,12 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.setString(2, category.getDepartment());
             st.setString(3, category.getDescription());
 
-            // execute the prepared statement insert
-            st.executeUpdate();
+            // execute the prepared statement insert, get id of inserted supplier, update parameter
+            st.execute();
+            ResultSet rs = st.getResultSet();
+            if (rs.next()) {
+                category.setId(rs.getInt(1));
+            }
             st.close();
         }
         catch (SQLException exception) {
