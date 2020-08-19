@@ -13,12 +13,8 @@ import java.util.List;
 
 public class SupplierDaoJdbc implements SupplierDao {
     private static SupplierDaoJdbc instance;
-    private final DatabaseManager databaseManager;
 
-    private SupplierDaoJdbc() {
-        DataStore dataStore = DataStore.getInstance();
-        this.databaseManager = dataStore.getDatabaseManager();
-    }
+    private SupplierDaoJdbc() { }
 
     public static SupplierDaoJdbc getInstance() {
         if(instance == null) {
@@ -32,6 +28,9 @@ public class SupplierDaoJdbc implements SupplierDao {
         String query = "INSERT INTO suppliers ( name, description ) VALUES (?, ?)";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -54,6 +53,9 @@ public class SupplierDaoJdbc implements SupplierDao {
                 " WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -78,6 +80,9 @@ public class SupplierDaoJdbc implements SupplierDao {
         String query = "DELETE FROM suppliers WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -97,6 +102,9 @@ public class SupplierDaoJdbc implements SupplierDao {
         List<Supplier> suppliers = new ArrayList<>();
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
