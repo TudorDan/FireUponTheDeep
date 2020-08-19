@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JSONFiler {
-    String basePath;
+    private final String basePath;
 
     public JSONFiler(String basePath) {
         this.basePath = basePath;

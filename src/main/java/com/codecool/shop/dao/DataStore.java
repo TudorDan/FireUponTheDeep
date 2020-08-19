@@ -1,12 +1,19 @@
 package com.codecool.shop.dao;
 
+import com.codecool.shop.dao.database.CategoryDaoJdbc;
+import com.codecool.shop.dao.database.DatabaseManager;
+import com.codecool.shop.dao.database.ProductDaoJdbc;
+import com.codecool.shop.dao.database.SupplierDaoJdbc;
 import com.codecool.shop.dao.memory.*;
+
+import java.io.IOException;
 
 /**
  * Abstraction layer for easy selection of DAO implementation
  */
 public class DataStore {
     private DaoImplementations daoImplementation;
+    private DatabaseManager databaseManager = null;
 
     //DAOs
     public CategoryDao categoryDao;
@@ -17,9 +24,6 @@ public class DataStore {
 
     private static DataStore instance = null;
 
-    /**
-     * Private constructor prevents others from instantiating
-     */
     private DataStore() {}
 
     public void SetDaoImplementation(DaoImplementations daoImplementation) {
@@ -33,13 +37,26 @@ public class DataStore {
                 orderDao = OrderDaoMem.getInstance();
                 break;
             case DATABASE:
-                categoryDao = null;
-                supplierDao = null;
-                productDao = null;
+                categoryDao = CategoryDaoJdbc.getInstance();
+                supplierDao = SupplierDaoJdbc.getInstance();
+                productDao = ProductDaoJdbc.getInstance();
                 userDao = null;
                 orderDao = null;
                 break;
         }
+    }
+
+    public void SetDatabase(String propFile) {
+        try {
+            databaseManager = DatabaseManager.getInstance(propFile);
+        } catch (IOException e) {
+            System.err.println("ERROR: DatabaseManager initialization failed = " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public DaoImplementations getDaoImplementation() {
+        return daoImplementation;
     }
 
     public static DataStore getInstance() {
@@ -47,5 +64,9 @@ public class DataStore {
             instance = new DataStore();
         }
         return instance;
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 }

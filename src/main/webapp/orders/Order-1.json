@@ -1,0 +1,26 @@
+{
+   "date": "Tue Aug 18 22:20:46 EEST 2020",
+   "total": "657.00 USD",
+   "shipping": {
+      "zipcode": "060903",
+      "country": "Romania",
+      "address": "sector 6, Orsova nr. 104,  block 2,  ap.8",
+      "city": "Bucharest"
+   },
+   "id": 1,
+   "user": "Tudor Dan Duzinschi",
+   "products": [
+      {
+         "name": "Amazon Fire HD 8",
+         "quantity": "2",
+         "id": "3",
+         "supplier": "Amazon"
+      },
+      {
+         "name": "Lenovo IdeaPad Miix 700",
+         "quantity": "1",
+         "id": "2",
+         "supplier": "Lenovo"
+      }
+   ]
+}

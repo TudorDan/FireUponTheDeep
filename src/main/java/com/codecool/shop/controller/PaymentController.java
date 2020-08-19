@@ -112,11 +112,11 @@ public class PaymentController extends HttpServlet {
                 (new Mailer("pythonsendmailtest75@gmail.com", "lpiiamlxlfsnzwxs", user.getEmail(), subject, message)).start();
 
                 //save json file with order data
-                filer.writeOrder(order, "\\orders");
+                filer.writeOrder(order, "/orders");
 
                 //log event and update log file
                 order.logEvent(new Date(), "Order payed. Status = " + order.getStatus());
-                filer.writeOrderLog(order, "\\logs");
+                filer.writeOrderLog(order, "/logs");
 
                 //redirect to confirmation page
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("confirmation.html");

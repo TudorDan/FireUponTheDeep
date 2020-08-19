@@ -15,7 +15,21 @@ public class Initializer implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         DataStore dataStore = DataStore.getInstance();
-        dataStore.SetDaoImplementation(DaoImplementations.MEMORY); //change parameter to switch DAOs
+
+        //use parameter to select data container:
+        // "DaoImplementations.DATABASE" for database storage
+        // "DaoImplementations.MEMORY" for memory storage
+        dataStore.SetDaoImplementation(DaoImplementations.MEMORY);
+
+        if(dataStore.getDaoImplementation() == DaoImplementations.DATABASE) {
+            //use parameter to select database:
+            // "main_connection.properties" to use codecoolshop database
+            // "test_connection.properties" to use test database
+            dataStore.SetDatabase("main_connection.properties");
+
+            //[for testing] delete database before use
+            dataStore.getDatabaseManager().initDatabase();
+        }
 
         //setting up suppliers
         Supplier prada = new Supplier("Prada", "The most beautifull jewelries");
@@ -57,8 +71,8 @@ public class Initializer implements ServletContextListener {
         dataStore.productDao.add(product11);
 
         //setting up users
-        Address address1 = new Address("Romania", "Bistrita", "420010", "str. Alecsandri, nr. 6");
-        Address address2 = new Address("Poland", "Warsaw", "430070", "Happiness str., no. 15");
+        Address address1 = new Address("Romania", "Bistrita", "420070", "str. Fericirii, nr. 14");
+        Address address2 = new Address("Poland", "Warsav", "430070", "Happiness str., no. 15");
         User user1 = new User("Tudor Dan", "tudor_ist@gmail.com", "1234", "1234567890", address1, null, UserStatus.SIGNED);
         User user2 = new User("Pop Ion", "pop_ion@gmail.com", "2345", "0123456789", address2, address2, UserStatus.SIGNED);
         dataStore.userDao.add(user1);

@@ -63,7 +63,7 @@ public class Cart {
     }
 
     public Price getTotalPrice() {
-        float sum = 0;
+        double sum = 0;
         for (Item item : items) {
             sum += item.getTotalPrice().getSum();
         }
