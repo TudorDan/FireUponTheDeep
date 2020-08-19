@@ -40,7 +40,7 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.setString(2, category.getDepartment());
             st.setString(3, category.getDescription());
 
-            // execute the prepared statement insert, get id of inserted supplier, update parameter
+            // execute the prepared statement insert, get id of inserted category, update parameter
             st.execute();
             ResultSet rs = st.getResultSet();
             if (rs.next()) {

@@ -9,6 +9,7 @@ import com.codecool.shop.model.Supplier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,10 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public void add(Product product) {
-        String query = "INSERT INTO products ("
-                + " name,"
-                + " description,"
-                + " image_file_name,"
-                + " supplier_id,"
-                + " category_id ) VALUES ("
-                + "?, ?, ?, ?, ?)";
+        String productsQuery = "INSERT INTO products ( name, description, " +
+                "image_file_name, supplier_id, category_id ) " +
+                "VALUES (?, ?, ?, ?, ?) " +
+                "RETURNING id";
 
         try {
             //get DatabaseManager
@@ -41,15 +39,19 @@ public class ProductDaoJdbc implements ProductDao {
 
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
-            PreparedStatement st = conn.prepareStatement(query);
+            PreparedStatement st = conn.prepareStatement(productsQuery);
             st.setString(1, product.getName());
             st.setString(2, product.getDescription());
             st.setString(3, product.getImageFileName());
             st.setInt(4, product.getSupplier().getId());
             st.setInt(5, product.getCategory().getId());
 
-            // execute the prepared statement insert
-            st.executeUpdate();
+            // execute the prepared statement insert, get id of inserted product, update parameter
+            st.execute();
+            ResultSet rs = st.getResultSet();
+            if (rs.next()) {
+                product.setId(rs.getInt(1));
+            }
             st.close();
         }
         catch (SQLException exception) {
