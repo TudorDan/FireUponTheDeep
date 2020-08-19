@@ -38,7 +38,7 @@ public class Initializer implements ServletContextListener {
                 "accessories and leather goods");
         dataStore.supplierDao.add(prada);
         dataStore.supplierDao.add(bulgari);
-
+/*
         //setting up categories
         Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
                 "ornament");
@@ -91,5 +91,6 @@ public class Initializer implements ServletContextListener {
         User user2 = new User("Pop Ion", "pop_ion@gmail.com", "2345", "0123456789", address2, address2, UserStatus.SIGNED);
         dataStore.userDao.add(user1);
         dataStore.userDao.add(user2);
+ */
     }
 }
