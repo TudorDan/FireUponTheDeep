@@ -142,8 +142,37 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public List<Product> getAll() {
-        // TODO: 18.08.2020 product getAll()
-        return null;
+        String query = "SELECT id, name, description, image_file_name, supplier_id, category_id" +
+                " FROM products";
+
+        List<Product> products = new ArrayList<>();
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            DataStore dataStore = DataStore.getInstance();
+            while(result.next()) {
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String desc = result.getString("description");
+                String image = result.getString("image_file_name");
+                int supId = result.getInt("supplier_id");
+                int catId = result.getInt("category_id");
+
+                List<Price> prices = getPricesById(id);
+                Supplier supplier = dataStore.supplierDao.find(supId);
+                Category category = dataStore.categoryDao.find(catId);
+
+                products.add(new Product(id, name, desc, image, prices, category, supplier));
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Product find error => " + exception.getMessage());
+        }
+        return products;
     }
 
     @Override
