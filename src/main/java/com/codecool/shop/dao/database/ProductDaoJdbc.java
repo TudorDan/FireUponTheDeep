@@ -124,7 +124,20 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public void remove(int id) {
-        // TODO: 18.08.2020 product remove(id)
+        String query = "DELETE FROM products WHERE id = ?";
+
+        try {
+            // set all the prepared statement parameters
+            Connection conn = databaseManager.getConnection();
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement delete
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Product remove error => " + exception.getMessage());
+        }
     }
 
     @Override
