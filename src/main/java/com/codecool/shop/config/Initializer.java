@@ -48,7 +48,7 @@ public class Initializer implements ServletContextListener {
         dataStore.categoryDao.add(ring);
         dataStore.categoryDao.add(necklace);
         dataStore.categoryDao.add(earrings);
-/*
+
         //setting up products
         Date currentDate = new Date();
         Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
@@ -83,7 +83,7 @@ public class Initializer implements ServletContextListener {
         dataStore.productDao.add(product8);
         dataStore.productDao.add(product9);
         dataStore.productDao.add(product10);
-
+/*
         //setting up users
         Address address1 = new Address("Romania", "Bistrita", "420070", "str. Fericirii, nr. 14");
         Address address2 = new Address("Poland", "Warsav", "430070", "Happiness str., no. 15");
