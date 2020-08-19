@@ -1,7 +1,6 @@
 package com.codecool.shop.dao.database;
 
 import com.codecool.shop.dao.CategoryDao;
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Category;
 
 import java.util.ArrayList;
@@ -9,12 +8,8 @@ import java.util.List;
 
 public class CategoryDaoJdbc implements CategoryDao {
     private static CategoryDaoJdbc instance;
-    private final DatabaseManager databaseManager;
 
-    private CategoryDaoJdbc() {
-        DataStore dataStore = DataStore.getInstance();
-        this.databaseManager = dataStore.getDatabaseManager();
-    }
+    private CategoryDaoJdbc() { }
 
     public static CategoryDaoJdbc getInstance() {
         if(instance == null) {
