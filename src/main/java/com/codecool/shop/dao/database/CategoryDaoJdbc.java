@@ -1,8 +1,13 @@
 package com.codecool.shop.dao.database;
 
 import com.codecool.shop.dao.CategoryDao;
+import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Category;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +25,12 @@ public class CategoryDaoJdbc implements CategoryDao {
 
     @Override
     public void add(Category category) {
-        /*String query = "INSERT INTO categories (name, department, description) VALUES (?, ?, ?)";
+        String query = "INSERT INTO categories (name, department, description) VALUES (?, ?, ?)";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -36,16 +44,19 @@ public class CategoryDaoJdbc implements CategoryDao {
         }
         catch (SQLException exception) {
             System.err.println("ERROR: Category add error => " + exception.getMessage());
-        }*/
+        }
     }
 
     @Override
     public Category find(int id) {
-        /*String query = "SELECT id, name, department, description" +
+        String query = "SELECT id, name, department, description" +
                 " FROM categories" +
                 " WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -62,15 +73,18 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category find error => " + exception.getMessage());
-        }*/
+        }
         return null;
     }
 
     @Override
     public void remove(int id) {
-        /*String query = "DELETE FROM categories WHERE id = ?";
+        String query = "DELETE FROM categories WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -81,7 +95,7 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category remove error => " + exception.getMessage());
-        }*/
+        }
     }
 
     @Override
@@ -89,14 +103,17 @@ public class CategoryDaoJdbc implements CategoryDao {
         String query = "SELECT id, name, department, description FROM categories";
         List<Category> categories = new ArrayList<>();
 
-        /*try {
+        try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            while(result.next()) {
                 Integer id = result.getInt("id");
                 String name = result.getString("name");
                 String department = result.getString("department");
@@ -106,7 +123,7 @@ public class CategoryDaoJdbc implements CategoryDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category get all error => " + exception.getMessage());
-        }*/
+        }
         return categories;
     }
 }
