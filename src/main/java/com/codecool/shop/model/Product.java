@@ -1,7 +1,6 @@
 package com.codecool.shop.model;
 
 import java.util.ArrayList;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
@@ -51,8 +50,8 @@ public class Product extends BaseModel {
             prices.add(newPrice);
     }
 
-    public Currency getCurrentCurrency() {
-        return getCurrentPrice().getCurrency();
+    public List<Price> getPrices() {
+        return prices;
     }
 
     public String getPrice() {
