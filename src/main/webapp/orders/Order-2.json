@@ -1,6 +1,6 @@
 {
-   "date": "Tue Aug 18 22:21:41 EEST 2020",
-   "total": "49.90 USD",
+   "date": "Wed Aug 19 18:57:34 EEST 2020",
+   "total": "2630.00 USD",
    "shipping": {
       "zipcode": "060903",
       "country": "Romania",
@@ -9,10 +9,24 @@
    },
    "id": 2,
    "user": "Tudor Dan Duzinschi",
-   "products": [{
-      "name": "Amazon Fire",
-      "quantity": "1",
-      "id": "1",
-      "supplier": "Amazon"
-   }]
+   "products": [
+      {
+         "name": "Bulgari Ruby Earrings",
+         "quantity": "1",
+         "id": "2",
+         "supplier": "Bulgari"
+      },
+      {
+         "name": "Prada Blue crystal Necklace",
+         "quantity": "1",
+         "id": "3",
+         "supplier": "Prada"
+      },
+      {
+         "name": "Prada Tourmaline and diamond Rings",
+         "quantity": "1",
+         "id": "5",
+         "supplier": "Prada"
+      }
+   ]
 }

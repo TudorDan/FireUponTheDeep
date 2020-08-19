@@ -1,6 +1,6 @@
 {
-   "date": "Tue Aug 18 22:20:46 EEST 2020",
-   "total": "657.00 USD",
+   "date": "Wed Aug 19 18:56:04 EEST 2020",
+   "total": "2400.00 USD",
    "shipping": {
       "zipcode": "060903",
       "country": "Romania",
@@ -11,16 +11,22 @@
    "user": "Tudor Dan Duzinschi",
    "products": [
       {
-         "name": "Amazon Fire HD 8",
-         "quantity": "2",
-         "id": "3",
-         "supplier": "Amazon"
+         "name": "Prada Sapphire and diamonds Rings",
+         "quantity": "1",
+         "id": "1",
+         "supplier": "Prada"
       },
       {
-         "name": "Lenovo IdeaPad Miix 700",
+         "name": "Prada Blue crystal Necklace",
          "quantity": "1",
-         "id": "2",
-         "supplier": "Lenovo"
+         "id": "3",
+         "supplier": "Prada"
+      },
+      {
+         "name": "Bulgari Amethyst Silver Earrings",
+         "quantity": "2",
+         "id": "7",
+         "supplier": "Bulgari"
       }
    ]
 }
