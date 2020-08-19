@@ -7,17 +7,16 @@ import com.codecool.shop.model.Price;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.Supplier;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDaoJdbc implements ProductDao {
     private static ProductDaoJdbc instance;
-    private final DatabaseManager databaseManager;
 
-    private ProductDaoJdbc() {
-        DataStore dataStore = DataStore.getInstance();
-        this.databaseManager = dataStore.getDatabaseManager();
-    }
+    private ProductDaoJdbc() { }
 
     public static ProductDaoJdbc getInstance() {
         if(instance == null) {
@@ -28,7 +27,7 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public void add(Product product) {
-        /*String query = "INSERT INTO products ("
+        String query = "INSERT INTO products ("
                 + " name,"
                 + " description,"
                 + " image_file_name,"
@@ -37,6 +36,9 @@ public class ProductDaoJdbc implements ProductDao {
                 + "?, ?, ?, ?, ?)";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -52,7 +54,7 @@ public class ProductDaoJdbc implements ProductDao {
         }
         catch (SQLException exception) {
             System.err.println("ERROR: Product add error => " + exception.getMessage());
-        }*/
+        }
     }
 
     @Override
