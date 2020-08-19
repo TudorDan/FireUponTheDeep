@@ -111,7 +111,7 @@ public class SupplierDaoJdbc implements SupplierDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            while(result.next()) {
                 Integer id = result.getInt("id");
                 String name = result.getString("name");
                 String description = result.getString("description");
