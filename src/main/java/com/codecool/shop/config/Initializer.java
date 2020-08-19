@@ -38,7 +38,7 @@ public class Initializer implements ServletContextListener {
                 "accessories and leather goods");
         dataStore.supplierDao.add(prada);
         dataStore.supplierDao.add(bulgari);
-/*
+
         //setting up categories
         Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
                 "ornament");
@@ -48,7 +48,7 @@ public class Initializer implements ServletContextListener {
         dataStore.categoryDao.add(ring);
         dataStore.categoryDao.add(necklace);
         dataStore.categoryDao.add(earrings);
-
+/*
         //setting up products
         Date currentDate = new Date();
         Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
