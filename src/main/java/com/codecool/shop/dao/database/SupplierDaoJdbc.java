@@ -25,7 +25,9 @@ public class SupplierDaoJdbc implements SupplierDao {
 
     @Override
     public void add(Supplier supplier) {
-        String query = "INSERT INTO suppliers ( name, description ) VALUES (?, ?)";
+        String query = "INSERT INTO suppliers ( name, description ) " +
+                "VALUES (?, ?) " +
+                "RETURNING id";
 
         try {
             //get DatabaseManager
@@ -37,11 +39,14 @@ public class SupplierDaoJdbc implements SupplierDao {
             st.setString(1, supplier.getName());
             st.setString(2, supplier.getDescription());
 
-            // execute the prepared statement insert
-            st.executeUpdate();
+            // execute the prepared statement insert, get id of inserted supplier, update parameter
+            st.execute();
+            ResultSet rs = st.getResultSet();
+            if (rs.next()) {
+                supplier.setId(rs.getInt(1));
+            }
             st.close();
-        }
-        catch (SQLException exception) {
+        } catch (SQLException exception) {
             System.err.println("ERROR: Supplier add error => " + exception.getMessage());
         }
     }
@@ -63,7 +68,7 @@ public class SupplierDaoJdbc implements SupplierDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            if (result.next()) {
                 String name = result.getString("name");
                 String description = result.getString("description");
                 return new Supplier(id, name, description);
@@ -111,7 +116,7 @@ public class SupplierDaoJdbc implements SupplierDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            while(result.next()) {
+            while (result.next()) {
                 Integer id = result.getInt("id");
                 String name = result.getString("name");
                 String description = result.getString("description");
