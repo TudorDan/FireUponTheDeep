@@ -196,7 +196,6 @@ public class ProductDaoJdbc implements ProductDao {
                 String name = result.getString("name");
                 String desc = result.getString("description");
                 String image = result.getString("image_file_name");
-                int supId = result.getInt("supplier_id");
                 int catId = result.getInt("category_id");
 
                 List<Price> prices = getPricesById(id);
@@ -233,7 +232,6 @@ public class ProductDaoJdbc implements ProductDao {
                 String desc = result.getString("description");
                 String image = result.getString("image_file_name");
                 int supId = result.getInt("supplier_id");
-                int catId = result.getInt("category_id");
 
                 List<Price> prices = getPricesById(id);
                 Supplier supplier = dataStore.supplierDao.find(supId);
