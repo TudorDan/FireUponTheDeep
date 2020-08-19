@@ -19,7 +19,7 @@ public class Initializer implements ServletContextListener {
         //use parameter to select data container:
         // "DaoImplementations.DATABASE" for database storage
         // "DaoImplementations.MEMORY" for memory storage
-        dataStore.SetDaoImplementation(DaoImplementations.MEMORY);
+        dataStore.SetDaoImplementation(DaoImplementations.DATABASE);
 
         if(dataStore.getDaoImplementation() == DaoImplementations.DATABASE) {
             //use parameter to select database:
