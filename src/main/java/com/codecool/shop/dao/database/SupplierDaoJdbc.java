@@ -46,6 +46,7 @@ public class SupplierDaoJdbc implements SupplierDao {
                 supplier.setId(rs.getInt(1));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier add error => " + exception.getMessage());
         }
@@ -74,6 +75,7 @@ public class SupplierDaoJdbc implements SupplierDao {
                 return new Supplier(id, name, description);
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier find error => " + exception.getMessage());
         }
@@ -96,6 +98,7 @@ public class SupplierDaoJdbc implements SupplierDao {
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier remove error => " + exception.getMessage());
         }
@@ -123,6 +126,7 @@ public class SupplierDaoJdbc implements SupplierDao {
                 suppliers.add(new Supplier(id, name, description));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier get all error => " + exception.getMessage());
         }

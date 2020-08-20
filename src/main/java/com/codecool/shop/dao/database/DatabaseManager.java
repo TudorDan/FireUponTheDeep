@@ -34,7 +34,7 @@ public class DatabaseManager {
             String pass = properties.getProperty("password");
             return DriverManager.getConnection( url, user, pass);
         } catch (SQLException e) {
-            System.err.println("ERROR: Connection error.");
+            System.err.println("ERROR: Connection error." + e.getMessage());
             e.printStackTrace();
         }
         return null;

@@ -47,6 +47,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 category.setId(rs.getInt(1));
             }
             st.close();
+            conn.close();
         }
         catch (SQLException exception) {
             System.err.println("ERROR: Category add error => " + exception.getMessage());
@@ -77,6 +78,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 return new Category(id, name, department, description);
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category find error => " + exception.getMessage());
         }
@@ -99,6 +101,7 @@ public class CategoryDaoJdbc implements CategoryDao {
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category remove error => " + exception.getMessage());
         }
@@ -127,6 +130,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 categories.add(new Category(id, name, department, description));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category get all error => " + exception.getMessage());
         }

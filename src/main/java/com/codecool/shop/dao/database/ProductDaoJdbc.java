@@ -70,6 +70,7 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.executeBatch();
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product add error => " + exception.getMessage());
         }
@@ -107,6 +108,7 @@ public class ProductDaoJdbc implements ProductDao {
                 return new Product(id, name, desc, image, prices, category, supplier);
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product find error => " + exception.getMessage());
         }
@@ -137,6 +139,7 @@ public class ProductDaoJdbc implements ProductDao {
                 prices.add(new Price(sum, currency, date));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get prices error => " + exception.getMessage());
         }
@@ -159,6 +162,7 @@ public class ProductDaoJdbc implements ProductDao {
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product remove error => " + exception.getMessage());
         }
@@ -196,6 +200,7 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get all error => " + exception.getMessage());
         }
@@ -234,6 +239,7 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get by supplier error => " + exception.getMessage());
         }
@@ -273,6 +279,7 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
+            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get by category error => " + exception.getMessage());
         }
