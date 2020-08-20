@@ -1,7 +1,6 @@
 package com.codecool.shop.dao.database;
 
 import com.codecool.shop.dao.CategoryDao;
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.model.Category;
 
 import java.sql.Connection;
@@ -13,14 +12,20 @@ import java.util.List;
 
 public class CategoryDaoJdbc implements CategoryDao {
     private static CategoryDaoJdbc instance;
+    private DatabaseManager databaseManager;
 
-    private CategoryDaoJdbc() { }
+    private CategoryDaoJdbc() {
+    }
 
     public static CategoryDaoJdbc getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new CategoryDaoJdbc();
         }
         return instance;
+    }
+
+    public void setDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     @Override
@@ -29,12 +34,8 @@ public class CategoryDaoJdbc implements CategoryDao {
                 "VALUES (?, ?, ?) " +
                 "RETURNING id";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, category.getName());
             st.setString(2, category.getDepartment());
@@ -47,9 +48,7 @@ public class CategoryDaoJdbc implements CategoryDao {
                 category.setId(rs.getInt(1));
             }
             st.close();
-            conn.close();
-        }
-        catch (SQLException exception) {
+        } catch (SQLException exception) {
             System.err.println("ERROR: Category add error => " + exception.getMessage());
         }
     }
@@ -60,25 +59,20 @@ public class CategoryDaoJdbc implements CategoryDao {
                 " FROM categories" +
                 " WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            if (result.next()) {
                 String name = result.getString("name");
                 String department = result.getString("department");
                 String description = result.getString("description");
                 return new Category(id, name, department, description);
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category find error => " + exception.getMessage());
         }
@@ -89,19 +83,14 @@ public class CategoryDaoJdbc implements CategoryDao {
     public void remove(int id) {
         String query = "DELETE FROM categories WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category remove error => " + exception.getMessage());
         }
@@ -112,17 +101,13 @@ public class CategoryDaoJdbc implements CategoryDao {
         String query = "SELECT id, name, department, description FROM categories";
         List<Category> categories = new ArrayList<>();
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            while(result.next()) {
+            while (result.next()) {
                 Integer id = result.getInt("id");
                 String name = result.getString("name");
                 String department = result.getString("department");
@@ -130,7 +115,6 @@ public class CategoryDaoJdbc implements CategoryDao {
                 categories.add(new Category(id, name, department, description));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Category get all error => " + exception.getMessage());
         }

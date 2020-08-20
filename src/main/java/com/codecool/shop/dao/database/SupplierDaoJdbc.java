@@ -1,6 +1,5 @@
 package com.codecool.shop.dao.database;
 
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.model.Supplier;
 
@@ -13,6 +12,7 @@ import java.util.List;
 
 public class SupplierDaoJdbc implements SupplierDao {
     private static SupplierDaoJdbc instance;
+    private DatabaseManager databaseManager;
 
     private SupplierDaoJdbc() { }
 
@@ -23,18 +23,18 @@ public class SupplierDaoJdbc implements SupplierDao {
         return instance;
     }
 
+    public void setDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
+    }
+
     @Override
     public void add(Supplier supplier) {
         String query = "INSERT INTO suppliers ( name, description ) " +
                 "VALUES (?, ?) " +
                 "RETURNING id";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, supplier.getName());
             st.setString(2, supplier.getDescription());
@@ -46,7 +46,6 @@ public class SupplierDaoJdbc implements SupplierDao {
                 supplier.setId(rs.getInt(1));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier add error => " + exception.getMessage());
         }
@@ -58,12 +57,8 @@ public class SupplierDaoJdbc implements SupplierDao {
                 " FROM suppliers" +
                 " WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
@@ -75,7 +70,6 @@ public class SupplierDaoJdbc implements SupplierDao {
                 return new Supplier(id, name, description);
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier find error => " + exception.getMessage());
         }
@@ -86,19 +80,14 @@ public class SupplierDaoJdbc implements SupplierDao {
     public void remove(int id) {
         String query = "DELETE FROM suppliers WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier remove error => " + exception.getMessage());
         }
@@ -109,12 +98,8 @@ public class SupplierDaoJdbc implements SupplierDao {
         String query = "SELECT id, name, description FROM suppliers";
         List<Supplier> suppliers = new ArrayList<>();
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
             // execute the prepared statement select
@@ -126,7 +111,6 @@ public class SupplierDaoJdbc implements SupplierDao {
                 suppliers.add(new Supplier(id, name, description));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Supplier get all error => " + exception.getMessage());
         }

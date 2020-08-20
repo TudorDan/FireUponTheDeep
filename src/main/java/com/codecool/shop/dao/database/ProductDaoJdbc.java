@@ -15,17 +15,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ProductDaoJdbc implements ProductDao {
+public class ProductDaoJdbc implements ProductDao{
     private static ProductDaoJdbc instance;
+    private DatabaseManager databaseManager;
 
-    private ProductDaoJdbc() {
-    }
+    private ProductDaoJdbc() { }
 
     public static ProductDaoJdbc getInstance() {
         if (instance == null) {
             instance = new ProductDaoJdbc();
         }
         return instance;
+    }
+
+    public void setDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     @Override
@@ -38,12 +42,8 @@ public class ProductDaoJdbc implements ProductDao {
         String pricesQuery = "INSERT INTO prices ( product_id, sum, currency, date )" +
                 "VALUES (?, ?, ?, ?)";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()){
             //set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(productsQuery);
             st.setString(1, product.getName());
             st.setString(2, product.getDescription());
@@ -70,9 +70,9 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.executeBatch();
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product add error => " + exception.getMessage());
+            exception.printStackTrace();
         }
     }
 
@@ -82,12 +82,8 @@ public class ProductDaoJdbc implements ProductDao {
                 " FROM products" +
                 " WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()){
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
@@ -108,7 +104,6 @@ public class ProductDaoJdbc implements ProductDao {
                 return new Product(id, name, desc, image, prices, category, supplier);
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product find error => " + exception.getMessage());
         }
@@ -121,12 +116,8 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE product_id = ?";
 
         List<Price> prices = new ArrayList<>();
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()){
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
@@ -139,7 +130,6 @@ public class ProductDaoJdbc implements ProductDao {
                 prices.add(new Price(sum, currency, date));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get prices error => " + exception.getMessage());
         }
@@ -150,19 +140,14 @@ public class ProductDaoJdbc implements ProductDao {
     public void remove(int id) {
         String query = "DELETE FROM products WHERE id = ?";
 
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try(Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, id);
 
             // execute the prepared statement delete
             st.executeUpdate();
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product remove error => " + exception.getMessage());
         }
@@ -174,12 +159,8 @@ public class ProductDaoJdbc implements ProductDao {
                 " FROM products";
 
         List<Product> products = new ArrayList<>();
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try(Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
 
             // execute the prepared statement select
@@ -200,7 +181,6 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get all error => " + exception.getMessage());
         }
@@ -214,18 +194,14 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE supplier_id = ?";
 
         List<Product> products = new ArrayList<>();
-        try {
-            //get DatabaseManager
-            DataStore dataStore = DataStore.getInstance();
-            DatabaseManager databaseManager = dataStore.getDatabaseManager();
-
+        try (Connection conn = databaseManager.getConnection()){
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, supplier.getId());
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
+            DataStore dataStore = DataStore.getInstance();
             while(result.next()) {
                 int id = result.getInt("id");
                 String name = result.getString("name");
@@ -239,7 +215,6 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get by supplier error => " + exception.getMessage());
         }
@@ -254,12 +229,8 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE category_id = ?";
 
         List<Product> products = new ArrayList<>();
-        try {
-            //get DatabaseManager
-            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
-
+        try(Connection conn = databaseManager.getConnection()){
             // set all the prepared statement parameters
-            Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, category.getId());
 
@@ -279,7 +250,6 @@ public class ProductDaoJdbc implements ProductDao {
                 products.add(new Product(id, name, desc, image, prices, category, supplier));
             }
             st.close();
-            conn.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get by category error => " + exception.getMessage());
         }
