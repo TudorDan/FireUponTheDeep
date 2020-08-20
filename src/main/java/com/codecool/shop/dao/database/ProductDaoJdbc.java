@@ -17,10 +17,11 @@ import java.util.List;
 public class ProductDaoJdbc implements ProductDao {
     private static ProductDaoJdbc instance;
 
-    private ProductDaoJdbc() { }
+    private ProductDaoJdbc() {
+    }
 
     public static ProductDaoJdbc getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ProductDaoJdbc();
         }
         return instance;
@@ -33,11 +34,14 @@ public class ProductDaoJdbc implements ProductDao {
                 "VALUES (?, ?, ?, ?, ?) " +
                 "RETURNING id";
 
+        String pricesQuery = "INSERT INTO prices ( product_id, sum, currency, date )" +
+                "VALUES (?, ?, ?, ?)";
+
         try {
             //get DatabaseManager
             DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
 
-            // set all the prepared statement parameters
+            //set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(productsQuery);
             st.setString(1, product.getName());
@@ -46,15 +50,26 @@ public class ProductDaoJdbc implements ProductDao {
             st.setInt(4, product.getSupplier().getId());
             st.setInt(5, product.getCategory().getId());
 
-            // execute the prepared statement insert, get id of inserted product, update parameter
+            //execute the prepared statement insert, get id of inserted product, update parameter
             st.execute();
             ResultSet rs = st.getResultSet();
             if (rs.next()) {
                 product.setId(rs.getInt(1));
             }
+
+            //reuse statement to insert the product prices
+            List<Price> prices = product.getPrices();
+            st = conn.prepareStatement(pricesQuery);
+            for (Price price : prices) {
+                st.setInt(1, product.getId());
+                st.setDouble(2, price.getSum());
+                st.setString(3, price.getCurrency().toString());
+                st.setDate(4, new java.sql.Date(price.getDate().getTime()));
+                st.addBatch();
+            }
+            st.executeBatch();
             st.close();
-        }
-        catch (SQLException exception) {
+        } catch (SQLException exception) {
             System.err.println("ERROR: Product add error => " + exception.getMessage());
         }
     }
