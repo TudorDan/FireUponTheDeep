@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ProductDaoJdbc implements ProductDao {
@@ -76,11 +77,14 @@ public class ProductDaoJdbc implements ProductDao {
 
     @Override
     public Product find(int id) {
-        /*String query = "SELECT id, name, description, image_file_name, supplier_id, category_id" +
+        String query = "SELECT id, name, description, image_file_name, supplier_id, category_id" +
                 " FROM products" +
                 " WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -105,7 +109,7 @@ public class ProductDaoJdbc implements ProductDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product find error => " + exception.getMessage());
-        }*/
+        }
         return null;
     }
 
@@ -115,7 +119,10 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE product_id = ?";
 
         List<Price> prices = new ArrayList<>();
-        /*try {
+        try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -132,15 +139,18 @@ public class ProductDaoJdbc implements ProductDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product get prices error => " + exception.getMessage());
-        }*/
+        }
         return prices;
     }
 
     @Override
     public void remove(int id) {
-        /*String query = "DELETE FROM products WHERE id = ?";
+        String query = "DELETE FROM products WHERE id = ?";
 
         try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -151,7 +161,7 @@ public class ProductDaoJdbc implements ProductDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product remove error => " + exception.getMessage());
-        }*/
+        }
     }
 
     @Override
@@ -160,7 +170,10 @@ public class ProductDaoJdbc implements ProductDao {
                 " FROM products";
 
         List<Product> products = new ArrayList<>();
-        /*try {
+        try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -184,8 +197,8 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Product find error => " + exception.getMessage());
-        }*/
+            System.err.println("ERROR: Product get all error => " + exception.getMessage());
+        }
         return products;
     }
 
@@ -208,7 +221,6 @@ public class ProductDaoJdbc implements ProductDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-
             while(result.next()) {
                 int id = result.getInt("id");
                 String name = result.getString("name");
@@ -223,8 +235,9 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Product find error => " + exception.getMessage());
+            System.err.println("ERROR: Product get by supplier error => " + exception.getMessage());
         }
+
         return products;
     }
 
@@ -235,7 +248,10 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE category_id = ?";
 
         List<Product> products = new ArrayList<>();
-        /*try {
+        try {
+            //get DatabaseManager
+            DatabaseManager databaseManager = DataStore.getInstance().getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -258,8 +274,8 @@ public class ProductDaoJdbc implements ProductDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Product find error => " + exception.getMessage());
-        }*/
+            System.err.println("ERROR: Product get by category error => " + exception.getMessage());
+        }
         return products;
     }
 }
