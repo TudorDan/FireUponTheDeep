@@ -196,7 +196,11 @@ public class ProductDaoJdbc implements ProductDao {
                 " WHERE supplier_id = ?";
 
         List<Product> products = new ArrayList<>();
-        /*try {
+        try {
+            //get DatabaseManager
+            DataStore dataStore = DataStore.getInstance();
+            DatabaseManager databaseManager = dataStore.getDatabaseManager();
+
             // set all the prepared statement parameters
             Connection conn = databaseManager.getConnection();
             PreparedStatement st = conn.prepareStatement(query);
@@ -204,7 +208,7 @@ public class ProductDaoJdbc implements ProductDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            DataStore dataStore = DataStore.getInstance();
+
             while(result.next()) {
                 int id = result.getInt("id");
                 String name = result.getString("name");
@@ -220,7 +224,7 @@ public class ProductDaoJdbc implements ProductDao {
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product find error => " + exception.getMessage());
-        }*/
+        }
         return products;
     }
 
