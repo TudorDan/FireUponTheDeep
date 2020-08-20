@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Product extends BaseModel {
 
-    private final List<Price> prices = new ArrayList<>();
+    private List<Price> prices = new ArrayList<>();
     private Category category;
     private Supplier supplier;
     private final String imageFileName;
@@ -24,6 +24,7 @@ public class Product extends BaseModel {
                    Category category, Supplier supplier) {
         super(id, name, description);
         this.imageFileName = imageFileName;
+        this.prices = prices;
         this.category = category;
         this.supplier = supplier;
     }
