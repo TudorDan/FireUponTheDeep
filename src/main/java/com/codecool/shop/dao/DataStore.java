@@ -49,6 +49,8 @@ public class DataStore {
             ProductDaoJdbc.getInstance().setDatabaseManager(databaseManager);
             CategoryDaoJdbc.getInstance().setDatabaseManager(databaseManager);
             SupplierDaoJdbc.getInstance().setDatabaseManager(databaseManager);
+            UserDaoJdbc.getInstance().setDatabaseManager(databaseManager);
+            OrderDaoJdbc.getInstance().setDatabaseManager(databaseManager);
         } catch (IOException e) {
             System.err.println("ERROR: DatabaseManager initialization failed = " + e.getMessage());
             e.printStackTrace();
