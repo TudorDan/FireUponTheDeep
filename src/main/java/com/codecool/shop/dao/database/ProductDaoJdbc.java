@@ -72,7 +72,6 @@ public class ProductDaoJdbc implements ProductDao{
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Product add error => " + exception.getMessage());
-            exception.printStackTrace();
         }
     }
 
