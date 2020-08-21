@@ -1,9 +1,6 @@
 package com.codecool.shop.dao;
 
-import com.codecool.shop.dao.database.CategoryDaoJdbc;
-import com.codecool.shop.dao.database.DatabaseManager;
-import com.codecool.shop.dao.database.ProductDaoJdbc;
-import com.codecool.shop.dao.database.SupplierDaoJdbc;
+import com.codecool.shop.dao.database.*;
 import com.codecool.shop.dao.memory.*;
 
 import java.io.IOException;
@@ -40,8 +37,8 @@ public class DataStore {
                 categoryDao = CategoryDaoJdbc.getInstance();
                 supplierDao = SupplierDaoJdbc.getInstance();
                 productDao = ProductDaoJdbc.getInstance();
-                userDao = null;
-                orderDao = null;
+                userDao = UserDaoJdbc.getInstance();
+                orderDao = OrderDaoJdbc.getInstance();
                 break;
         }
     }
