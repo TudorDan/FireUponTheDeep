@@ -1,6 +1,5 @@
 package com.codecool.shop.dao.database;
 
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.Address;
 import com.codecool.shop.model.Cart;
@@ -8,18 +7,19 @@ import com.codecool.shop.model.User;
 
 public class UserDaoJdbc implements UserDao {
     private static UserDaoJdbc instance;
-    private final DatabaseManager databaseManager;
+    private DatabaseManager databaseManager;
 
-    private UserDaoJdbc() {
-        DataStore dataStore = DataStore.getInstance();
-        this.databaseManager = dataStore.getDatabaseManager();
-    }
+    private UserDaoJdbc() { }
 
     public static UserDaoJdbc getInstance() {
         if(instance == null) {
             instance = new UserDaoJdbc();
         }
         return instance;
+    }
+
+    public void setDatabaseManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     @Override
