@@ -104,9 +104,9 @@ public class UserDaoJdbc implements UserDao {
                 st.setInt(5, 0);
             }
             if(shipping!=null) {
-                st.setInt(5, shipping.getId());
+                st.setInt(6, shipping.getId());
             } else {
-                st.setInt(5, 0);
+                st.setInt(6, 0);
             }
             st.setString(7, user.getUserStatus().toString());
 
