@@ -29,7 +29,7 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void add(User user) {
-        String addressQuery = "INSERT INTO addresses (country, city, zipcode, home_address) " +
+        /*String addressQuery = "INSERT INTO addresses (country, city, zipcode, home_address) " +
                 "VALUES (?, ?, ?, ?) " +
                 "RETURNING id";
 
@@ -84,10 +84,12 @@ public class UserDaoJdbc implements UserDao {
                 System.err.println("ERROR: Shipping address add error => " + exception.getMessage());
             }
         }
-
+*/
+        // TODO: 21.08.2020 insert myCart into orders
+                
         String usersQuery = "INSERT INTO users (name, email, password, " +
-                "phone_number, billing_id, shipping_id, user_status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?) " +
+                "phone_number, user_status) " +
+                "VALUES (?, ?, ?, ?, ?::UserStatus) " +
                 "RETURNING id";
 
         //insert user
@@ -98,17 +100,7 @@ public class UserDaoJdbc implements UserDao {
             st.setString(2, user.getEmail());
             st.setString(3, user.getPassword());
             st.setString(4, user.getPhoneNumber());
-            if(billing!=null) {
-                st.setInt(5, billing.getId());
-            } else {
-                st.setInt(5, 0);
-            }
-            if(shipping!=null) {
-                st.setInt(6, shipping.getId());
-            } else {
-                st.setInt(6, 0);
-            }
-            st.setString(7, user.getUserStatus().toString());
+            st.setString(5, user.getUserStatus().toString());
 
             // execute the prepared statement insert, get id of inserted user,
             // update parameter
