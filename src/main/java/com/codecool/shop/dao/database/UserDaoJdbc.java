@@ -3,12 +3,10 @@ package com.codecool.shop.dao.database;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.Address;
 import com.codecool.shop.model.Cart;
+import com.codecool.shop.model.OrderStatus;
 import com.codecool.shop.model.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDaoJdbc implements UserDao {
     private static UserDaoJdbc instance;
@@ -85,16 +83,17 @@ public class UserDaoJdbc implements UserDao {
             }
         }
 */
-        // TODO: 21.08.2020 insert myCart into orders
-                
         String usersQuery = "INSERT INTO users (name, email, password, " +
                 "phone_number, user_status) " +
                 "VALUES (?, ?, ?, ?, ?::UserStatus) " +
                 "RETURNING id";
 
-        //insert user
+        String ordersQuery = "INSERT INTO orders (name, user_id, is_my_cart, " +
+                "date, order_status) " +
+                "VALUES (?, ?, ?, ?, ?::OrderStatus) ";
+
         try (Connection conn = databaseManager.getConnection()) {
-            // set all the prepared statement parameters
+            //insert new user
             PreparedStatement st = conn.prepareStatement(usersQuery);
             st.setString(1, user.getName());
             st.setString(2, user.getEmail());
@@ -109,6 +108,18 @@ public class UserDaoJdbc implements UserDao {
             if (rs.next()) {
                 user.setId(rs.getInt(1));
             }
+
+            //insert empty "my cart" order for the user
+            st = conn.prepareStatement(ordersQuery);
+            st.setString(1, "MyCart");
+            st.setInt(2, user.getId());
+            st.setBoolean(3, true);
+            st.setDate(4, new Date(new java.util.Date().getTime()));
+            st.setString(5, OrderStatus.CHECKED.toString());
+
+            // execute the prepared statement insert
+            st.executeUpdate();
+
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: User add error => " + exception.getMessage());
