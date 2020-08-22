@@ -128,7 +128,22 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public boolean isSignedUp(String email) {
-        // TODO: 18.08.2020 user isSignedUp(email)
+        String query = "SELECT id FROM users WHERE email = ?";
+
+        try (Connection conn = databaseManager.getConnection()){
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, email);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                st.close();
+                return true;
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: isSignedUp error => " + exception.getMessage());
+        }
         return false;
     }
 
