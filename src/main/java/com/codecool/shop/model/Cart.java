@@ -15,6 +15,10 @@ public class Cart {
         }
     }
 
+    public Cart(List<Item> items) {
+        this.items = items;
+    }
+
     public Cart() {
         items = new ArrayList<>();
     }
