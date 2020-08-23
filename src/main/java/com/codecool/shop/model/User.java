@@ -11,6 +11,18 @@ public class User {
     private final UserStatus userStatus;
     private Cart myCart;
 
+    public User(int id, String name, String email, String password, String phoneNumber, Address billing, Address shipping, UserStatus userStatus, Cart myCart) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.billing = billing;
+        this.shipping = shipping;
+        this.userStatus = userStatus;
+        this.myCart = myCart;
+    }
+
     public User(String name, String email, String password, String phoneNumber, Address billing, Address shipping, UserStatus userStatus) {
         this.name = name;
         this.email = email;
