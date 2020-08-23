@@ -1,6 +1,7 @@
 package com.codecool.shop.dao.database;
 
 import com.codecool.shop.dao.OrderDao;
+import com.codecool.shop.model.Item;
 import com.codecool.shop.model.Order;
 import com.codecool.shop.model.User;
 
@@ -36,6 +37,11 @@ public class OrderDaoJdbc implements OrderDao {
     @Override
     public List<Order> getOrdersOf(User user) {
         // TODO: 18.08.2020 Order getOrdersOf(user)
+        return null;
+    }
+    
+    public List<Item> getItemsByOrderId() {
+        // TODO: 23.08.2020 getItemsByOrderId
         return null;
     }
 }
