@@ -1,6 +1,5 @@
 package com.codecool.shop.dao.database;
 
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.*;
 
@@ -162,7 +161,6 @@ public class UserDaoJdbc implements UserDao {
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
             if(result.next()) {
-                DataStore dataStore = DataStore.getInstance();
                 int id = result.getInt("id");
                 String name = result.getString("name");
                 String phone = result.getString("phone_number");
@@ -171,7 +169,7 @@ public class UserDaoJdbc implements UserDao {
                 UserStatus status = UserStatus.valueOf(result.getString("user_status"));
 
                 Address shipping = getAddressById(shipId);
-                Address billing = getAddressById(shipId);
+                Address billing = getAddressById(billId);
                 Cart myCart = new Cart(getMyCartItemsById(id));
 
                 return new User(id, name, email, password, phone, billing, shipping, status, myCart);
