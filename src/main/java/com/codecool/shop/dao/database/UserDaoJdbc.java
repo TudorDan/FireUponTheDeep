@@ -1,12 +1,11 @@
 package com.codecool.shop.dao.database;
 
+import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.UserDao;
-import com.codecool.shop.model.Address;
-import com.codecool.shop.model.Cart;
-import com.codecool.shop.model.OrderStatus;
-import com.codecool.shop.model.User;
+import com.codecool.shop.model.*;
 
 import java.sql.*;
+import java.util.List;
 
 public class UserDaoJdbc implements UserDao {
     private static UserDaoJdbc instance;
@@ -43,7 +42,7 @@ public class UserDaoJdbc implements UserDao {
                 st.setString(4, billing.getHomeAddress());
 
                 // execute the prepared statement insert,
-                // get id of inserted address, update billing
+                // get id of inserted addres, update billing
                 st.execute();
                 ResultSet rs = st.getResultSet();
                 if (rs.next()) {
@@ -149,7 +148,48 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public User getAuthenticatedUser(String email, String password) {
-        // TODO: 18.08.2020 user getAuthenticatedUser(email, pass)
+        String query = "SELECT id, name, email, password, phone_number, " +
+                "billing_id, shipping_id, user_status " +
+                "FROM users " +
+                "WHERE email = ? and password = ?";
+
+        try (Connection conn = databaseManager.getConnection()){
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, email);
+            st.setString(2, password);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                DataStore dataStore = DataStore.getInstance();
+                int id = result.getInt("id");
+                String name = result.getString("name");
+                String phone = result.getString("phone_number");
+                int shipId = result.getInt("shipping_id");
+                int billId = result.getInt("billing_id");
+                UserStatus status = UserStatus.valueOf(result.getString("user_status"));
+
+                Address shipping = getAddressById(shipId);
+                Address billing = getAddressById(shipId);
+                Cart myCart = new Cart(getMyCartItemsById(id));
+
+                return new User(id, name, email, password, phone, billing, shipping, status, myCart);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Product find error => " + exception.getMessage());
+        }
+        return null;
+    }
+
+    private Address getAddressById(int id) {
+        // TODO: 25.08.2020 getAddressById
+        return null;
+    }
+    
+    private List<Item> getMyCartItemsById(int id) {
+        // TODO: 25.08.2020 getMyCartItemsById
         return null;
     }
 
