@@ -10,10 +10,11 @@ public class UserDaoJdbc implements UserDao {
     private static UserDaoJdbc instance;
     private DatabaseManager databaseManager;
 
-    private UserDaoJdbc() { }
+    private UserDaoJdbc() {
+    }
 
     public static UserDaoJdbc getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new UserDaoJdbc();
         }
         return instance;
@@ -128,13 +129,13 @@ public class UserDaoJdbc implements UserDao {
     public boolean isSignedUp(String email) {
         String query = "SELECT id FROM users WHERE email = ?";
 
-        try (Connection conn = databaseManager.getConnection()){
+        try (Connection conn = databaseManager.getConnection()) {
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, email);
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            if (result.next()) {
                 st.close();
                 return true;
             }
@@ -152,7 +153,7 @@ public class UserDaoJdbc implements UserDao {
                 "FROM users " +
                 "WHERE email = ? and password = ?";
 
-        try (Connection conn = databaseManager.getConnection()){
+        try (Connection conn = databaseManager.getConnection()) {
             // set all the prepared statement parameters
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, email);
@@ -160,7 +161,7 @@ public class UserDaoJdbc implements UserDao {
 
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
-            if(result.next()) {
+            if (result.next()) {
                 int id = result.getInt("id");
                 String name = result.getString("name");
                 String phone = result.getString("phone_number");
@@ -182,10 +183,31 @@ public class UserDaoJdbc implements UserDao {
     }
 
     private Address getAddressById(int id) {
-        // TODO: 25.08.2020 getAddressById
+        String query = "SELECT id, country, city, zipcode, home_address" +
+                " FROM addresses" +
+                " WHERE id = ?";
+
+        try (Connection conn = databaseManager.getConnection()) {
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if (result.next()) {
+                String country = result.getString("country");
+                String city = result.getString("city");
+                String zipcode = result.getString("zipcode");
+                String home = result.getString("home_address");
+                return new Address(id, country, city, zipcode, home);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Get address by id error => " + exception.getMessage());
+        }
         return null;
     }
-    
+
     private List<Item> getMyCartItemsById(int id) {
         // TODO: 25.08.2020 getMyCartItemsById
         return null;
