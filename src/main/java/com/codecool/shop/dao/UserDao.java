@@ -11,5 +11,4 @@ public interface UserDao {
     void remove(User user);
     void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping);
     void updateUserCart(User user, Cart cart);
-    Cart getUserCart(User user);
 }

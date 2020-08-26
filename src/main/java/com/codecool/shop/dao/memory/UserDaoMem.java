@@ -81,14 +81,4 @@ public class UserDaoMem implements UserDao {
             }
         }
     }
-
-    @Override
-    public Cart getUserCart(User user) {
-        for(User old : data) {
-            if(user.getId() == old.getId()) {
-                return user.getMyCart();
-            }
-        }
-        return null;
-    }
 }

@@ -171,7 +171,7 @@ public class UserDaoJdbc implements UserDao {
 
                 Address shipping = getAddressById(shipId);
                 Address billing = getAddressById(billId);
-                Cart myCart = new Cart(getMyCartItemsById(id));
+                Cart myCart = new Cart(getMyCartItemsByUserId(id));
 
                 return new User(id, name, email, password, phone, billing, shipping, status, myCart);
             }
@@ -208,8 +208,8 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
-    private List<Item> getMyCartItemsById(int id) {
-        // TODO: 25.08.2020 getMyCartItemsById
+    private List<Item> getMyCartItemsByUserId(int id) {
+
         return null;
     }
 
@@ -226,11 +226,5 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public void updateUserCart(User user, Cart cart) {
         // TODO: 18.08.2020 user updateUserCart(user, cart)
-    }
-
-    @Override
-    public Cart getUserCart(User user) {
-        // TODO: 18.08.2020 user getUserCart(user)
-        return null;
     }
 }
