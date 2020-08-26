@@ -4,6 +4,7 @@ import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJdbc implements UserDao {
@@ -209,8 +210,8 @@ public class UserDaoJdbc implements UserDao {
     }
 
     private List<Item> getMyCartItemsByUserId(int id) {
-
-        return null;
+        List<Item> items = new ArrayList<>();
+        return items;
     }
 
     @Override
