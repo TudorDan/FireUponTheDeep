@@ -183,6 +183,7 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
+    // TODO: 27.08.2020 rewrite select in getAuthenticateduser to also extract addresses data
     private Address getAddressById(int id) {
         String query = "SELECT id, country, city, zipcode, home_address" +
                 " FROM addresses" +
@@ -209,6 +210,7 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
+    // TODO: 27.08.2020 rewrite select in getAuthenticateduser to also extract myCart items data
     private List<Item> getMyCartItemsByUserId(int id) {
         List<Item> items = new ArrayList<>();
         return items;
