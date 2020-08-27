@@ -142,7 +142,7 @@ public class UserDaoJdbc implements UserDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: isSignedUp error => " + exception.getMessage());
+            System.err.println("ERROR: User isSignedUp error => " + exception.getMessage());
         }
         return false;
     }
