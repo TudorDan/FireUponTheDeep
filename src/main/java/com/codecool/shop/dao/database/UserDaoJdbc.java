@@ -183,7 +183,7 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
-    // TODO: 27.08.2020 rewrite select in getAuthenticateduser to also extract addresses data
+    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract addresses data
     private Address getAddressById(int id) {
         String query = "SELECT id, country, city, zipcode, home_address" +
                 " FROM addresses" +
@@ -210,9 +210,70 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
-    // TODO: 27.08.2020 rewrite select in getAuthenticateduser to also extract myCart items data
+    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract myCart items data
     private List<Item> getMyCartItemsByUserId(int id) {
+        String query = "SELECT itm.quantity, " +
+                "     pri.sum, pri.currency, pri.date, " +
+                "     pro.id, pro.name, pro.description, pro.image_file_name, " +
+                "     sup.id, sup.name, sup.description, " +
+                "     cat.id, cat.name, cat.department, cat.description " +
+                "FROM users usr, orders ord, items itm, prices pri, " +
+                "     products pro, suppliers sup, categories cat " +
+                "WHERE usr.id = ? " +
+                "  AND ord.user_id = usr.id " +
+                "  AND ord.is_my_cart = true " +
+                "  AND itm.order_id = ord.id " +
+                "  AND itm.price_id = pri.id " +
+                "  AND pri.product_id = pro.id " +
+                "  AND pro.supplier_id = sup.id " +
+                "  AND pro.category_id = cat.id";
+
         List<Item> items = new ArrayList<>();
+        try (Connection conn = databaseManager.getConnection()) {
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            while (result.next()) {
+                //crate supplier
+                int supId = result.getInt("sup.id");
+                String supName = result.getString("sup.name");
+                String supDesc = result.getString("sup.description");
+                Supplier sup = new Supplier(supId, supName, supDesc);
+
+                //crate category
+                int catId = result.getInt("cat.id");
+                String catName = result.getString("cat.name");
+                String catDept = result.getString("cat.department");
+                String catDesc = result.getString("cat.description");
+                Category cat = new Category(catId, catName, catDept, catDesc);
+
+                //create price pri.sum, pri.currency, pri.date
+                double sum = result.getDouble("pri.sum");
+                String currency = result.getString("pri.currency");
+                java.util.Date date = result.getDate("pri.date");
+                Price price = new Price(sum, currency, date);
+                List<Price> prices = new ArrayList<>();
+                prices.add(price);
+
+                //create product
+                int proId = result.getInt("pro.id");
+                String proName = result.getString("pro.name");
+                String proDesc = result.getString("pro.description");
+                String proImg = result.getString("pro.image_file_name");
+                Product product = new Product(proId, proName, proDesc, proImg, prices, cat, sup);
+
+                //create item and add to list
+                int quantity = result.getInt("itm.quantity");
+                items.add(new Item(product, price, quantity));
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Get address by id error => " + exception.getMessage());
+        }
+
         return items;
     }
 
