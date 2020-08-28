@@ -279,7 +279,19 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void remove(User user) {
-        // TODO: 18.08.2020 remove(user)
+        String query = "DELETE FROM users WHERE id = ?";
+
+        try(Connection conn = databaseManager.getConnection()) {
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, user.getId());
+
+            // execute the prepared statement delete
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: User remove error => " + exception.getMessage());
+        }
     }
 
     @Override
