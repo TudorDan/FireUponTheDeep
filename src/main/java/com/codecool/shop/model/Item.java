@@ -20,6 +20,12 @@ public class Item {
         quantity = 1;
     }
 
+    public Item(Product product, Price price, int quantity) {
+        this.product = product;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public Product getProduct() {
         return product;
     }
