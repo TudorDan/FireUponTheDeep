@@ -271,7 +271,7 @@ public class UserDaoJdbc implements UserDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Get address by id error => " + exception.getMessage());
+            System.err.println("ERROR: Get my cart items by id error => " + exception.getMessage());
         }
 
         return items;
