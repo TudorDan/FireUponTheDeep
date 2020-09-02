@@ -3,6 +3,7 @@ package com.codecool.shop.dao.database;
 import com.codecool.shop.dao.OrderDao;
 import com.codecool.shop.model.Item;
 import com.codecool.shop.model.Order;
+import com.codecool.shop.model.OrderStatus;
 import com.codecool.shop.model.User;
 
 import java.sql.*;
@@ -71,7 +72,18 @@ public class OrderDaoJdbc implements OrderDao {
 
     @Override
     public void setPayed(Order order) {
-        // TODO: 18.08.2020 setPayed(order)
+        try(Connection conn = databaseManager.getConnection()) {
+            String updateOrderStatus = "UPDATE orders " +
+                    "SET order_status = CAST(? AS OrderStatus) " +
+                    "WHERE id = ?";
+            PreparedStatement st = conn.prepareStatement(updateOrderStatus);
+            st.setString(1, OrderStatus.PAID.toString());
+            st.setInt(2, order.getId());
+            st.executeUpdate();
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Set payed order error => " + exception.getMessage());
+        }
     }
 
     @Override
