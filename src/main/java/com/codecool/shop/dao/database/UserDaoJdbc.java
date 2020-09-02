@@ -170,6 +170,7 @@ public class UserDaoJdbc implements UserDao {
                 int billId = result.getInt("billing_id");
                 UserStatus status = UserStatus.valueOf(result.getString("user_status"));
 
+                //3 selects here - should be optimized somehow
                 Address shipping = getAddressById(shipId);
                 Address billing = getAddressById(billId);
                 Cart myCart = new Cart(getMyCartItemsByUserId(id));
@@ -183,7 +184,7 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
-    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract addresses data
+    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract addresses data and delete this function
     private Address getAddressById(int id) {
         String query = "SELECT id, country, city, zipcode, home_address" +
                 " FROM addresses" +
@@ -210,7 +211,8 @@ public class UserDaoJdbc implements UserDao {
         return null;
     }
 
-    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract myCart items data
+    // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract myCart items data and delete this
+    //  function
     private List<Item> getMyCartItemsByUserId(int id) {
         String query = "SELECT itm.quantity, " +
                 "     pri.sum, pri.currency, pri.date, " +
@@ -271,7 +273,7 @@ public class UserDaoJdbc implements UserDao {
             }
             st.close();
         } catch (SQLException exception) {
-            System.err.println("ERROR: Get my cart items by id error => " + exception.getMessage());
+            System.err.println("ERROR: Get may cart items by id error => " + exception.getMessage());
         }
 
         return items;
@@ -296,7 +298,41 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping) {
-        // TODO: 18.08.2020 updateUser(user, ...)
+        String insertQuerry = "";
+        String updateQuerry = "";
+
+        try(Connection conn = databaseManager.getConnection()) {
+            PreparedStatement st;
+
+            //update shipping
+            if (user.getShipping() == null) {
+                //insert shipping in database and update user parameter
+
+
+            } else {
+                //update shipping in database and update user parameter
+
+
+            }
+            user.setShipping(shipping);
+
+            //update billing
+            if (user.getBilling() == null) {
+                //insert billing in database and update user parameter
+
+
+            } else {
+                //update billing in database and update user parameter
+
+
+            }
+            user.setBilling(billing);
+
+            //update the rest of the data
+
+        } catch (SQLException exception) {
+            System.err.println("ERROR: User update error => " + exception.getMessage());
+        }
     }
 
     @Override
