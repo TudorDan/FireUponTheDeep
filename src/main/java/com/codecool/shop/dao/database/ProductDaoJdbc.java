@@ -254,4 +254,30 @@ public class ProductDaoJdbc implements ProductDao{
         }
         return products;
     }
+
+    @Override
+    public int getCurrentPriceIdByProduct(int id) {
+        String query = "SELECT id " +
+                "FROM prices " +
+                "WHERE product_id = ? " +
+                "ORDER BY date DESC " +
+                "LIMIT 1";
+
+        int priceId = 0;
+        try (Connection conn = databaseManager.getConnection()){
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                priceId = result.getInt(1);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Product get prices error => " + exception.getMessage());
+        }
+        return priceId;
+    }
 }

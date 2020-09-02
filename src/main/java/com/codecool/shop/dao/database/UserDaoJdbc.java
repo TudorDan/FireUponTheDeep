@@ -1,5 +1,6 @@
 package com.codecool.shop.dao.database;
 
+import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.*;
 
@@ -374,8 +375,9 @@ public class UserDaoJdbc implements UserDao {
                     "VALUES (?, ?, ?)";
             st = conn.prepareStatement(insertItemsQuery);
             List<Item> items = cart.getItems();
+            DataStore dataStore = DataStore.getInstance();
             for(Item item : items) {
-                st.setInt(1, getCurrentPriceIdByProduct(item.getProduct().getId()));
+                st.setInt(1, dataStore.productDao.getCurrentPriceIdByProduct(item.getProduct().getId()));
                 st.setInt(2, orderId);
                 st.setInt(3, item.getQuantity());
                 st.addBatch();
@@ -387,30 +389,5 @@ public class UserDaoJdbc implements UserDao {
         } catch (SQLException exception) {
             System.err.println("ERROR: User cart update error => " + exception.getMessage());
         }
-    }
-
-    private int getCurrentPriceIdByProduct(int id) {
-        String query = "SELECT id " +
-                "FROM prices " +
-                "WHERE product_id = ? " +
-                "ORDER BY date DESC " +
-                "LIMIT 1";
-
-        int priceId = 0;
-        try (Connection conn = databaseManager.getConnection()){
-            // set all the prepared statement parameters
-            PreparedStatement st = conn.prepareStatement(query);
-            st.setInt(1, id);
-
-            // execute the prepared statement select
-            ResultSet result = st.executeQuery();
-            if(result.next()) {
-                priceId = result.getInt(1);
-            }
-            st.close();
-        } catch (SQLException exception) {
-            System.err.println("ERROR: Product get prices error => " + exception.getMessage());
-        }
-        return priceId;
     }
 }
