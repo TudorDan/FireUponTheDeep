@@ -60,6 +60,7 @@ public class OrderDaoJdbc implements OrderDao {
             st.setDate(1, new Date(order.getDate().getTime()));
             st.setString(2, "Order created. Status = " + order.getStatus());
             st.setInt(3, orderId);
+            st.executeUpdate();
 
             //close statement
             st.close();
