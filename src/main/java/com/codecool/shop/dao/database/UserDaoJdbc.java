@@ -183,13 +183,13 @@ public class UserDaoJdbc implements UserDao {
             // execute the prepared statement select
             ResultSet result = st.executeQuery();
             while (result.next()) {
-                //crate supplier
+                //create supplier
                 int supId = result.getInt("supId");
                 String supName = result.getString("supName");
                 String supDesc = result.getString("supDesc");
                 Supplier sup = new Supplier(supId, supName, supDesc);
 
-                //crate category
+                //create category
                 int catId = result.getInt("catId");
                 String catName = result.getString("catName");
                 String catDept = result.getString("catDept");
