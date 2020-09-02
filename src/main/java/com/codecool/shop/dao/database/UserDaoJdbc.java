@@ -27,62 +27,6 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void add(User user) {
-        /*String addressQuery = "INSERT INTO addresses (country, city, zipcode, home_address) " +
-                "VALUES (?, ?, ?, ?) " +
-                "RETURNING id";
-
-        //insert billing if exists
-        Address billing = user.getBilling();
-        if(billing != null) {
-            try (Connection conn = databaseManager.getConnection()) {
-                // set all the prepared statement parameters
-                PreparedStatement st = conn.prepareStatement(addressQuery);
-                st.setString(1, billing.getCountry());
-                st.setString(2, billing.getCity());
-                st.setString(3, billing.getZipcode());
-                st.setString(4, billing.getHomeAddress());
-
-                // execute the prepared statement insert,
-                // get id of inserted addres, update billing
-                st.execute();
-                ResultSet rs = st.getResultSet();
-                if (rs.next()) {
-                    billing.setId(rs.getInt(1));
-                }
-                st.close();
-            } catch (SQLException exception) {
-                System.err.println("ERROR: Billing address add error => " + exception.getMessage());
-            }
-        }
-
-        //insert shipping if exists
-        //if shipping missing but billing present assume shipping = billing
-        Address shipping = user.getShipping();
-        if(shipping == null) {
-            shipping = billing;
-        }
-        if(shipping != null) {
-            try (Connection conn = databaseManager.getConnection()) {
-                // set all the prepared statement parameters
-                PreparedStatement st = conn.prepareStatement(addressQuery);
-                st.setString(1, shipping.getCountry());
-                st.setString(2, shipping.getCity());
-                st.setString(3, shipping.getZipcode());
-                st.setString(4, shipping.getHomeAddress());
-
-                // execute the prepared statement insert,
-                // get id of inserted address, update billing
-                st.execute();
-                ResultSet rs = st.getResultSet();
-                if (rs.next()) {
-                    shipping.setId(rs.getInt(1));
-                }
-                st.close();
-            } catch (SQLException exception) {
-                System.err.println("ERROR: Shipping address add error => " + exception.getMessage());
-            }
-        }
-*/
         String usersQuery = "INSERT INTO users (name, email, password, " +
                 "phone_number, user_status) " +
                 "VALUES (?, ?, ?, ?, ?::UserStatus) " +
@@ -298,38 +242,106 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void updateUser(User user, String name, String email, String password, String phone, Address billing, Address shipping) {
-        String insertQuerry = "";
-        String updateQuerry = "";
+        String insertAddressQuery = "INSERT INTO addresses(country, city, zipcode, home_address) " +
+                "VALUES (?, ?, ?, ?) " +
+                "RETURNING id";
+
+        String updateAddressQuery = "UPDATE addresses SET country = ?, city = ?, zipcode = ?, home_address = ? " +
+                "WHERE id = ?";
+
+        String updateUserQuery = "UPDATE users SET name = ?, email = ?, password = ?, phone_number = ?, " +
+                "billing_id = ?, shipping_id = ? " +
+                "WHERE id = ?";
 
         try(Connection conn = databaseManager.getConnection()) {
             PreparedStatement st;
+            int shippingId = 0, billingId = 0;
 
             //update shipping
-            if (user.getShipping() == null) {
-                //insert shipping in database and update user parameter
+            if (user.getShipping() == null) { //no shipping address yet
+                //set parameters of shipping address insert
+                st = conn.prepareStatement(insertAddressQuery);
+                st.setString(1, shipping.getCountry());
+                st.setString(2, shipping.getCity());
+                st.setString(3, shipping.getZipcode());
+                st.setString(4, shipping.getHomeAddress());
 
+                //execute insert and get id
+                st.execute();
+                ResultSet rs = st.getResultSet();
+                if (rs.next()) {
+                    shippingId = rs.getInt(1);
+                }
 
-            } else {
-                //update shipping in database and update user parameter
+                //update shipping
+                shipping.setId(shippingId);
+            } else { //there is a shipping address to update
+                //set parameters of shipping address update
+                st = conn.prepareStatement(updateAddressQuery);
+                st.setString(1, shipping.getCountry());
+                st.setString(2, shipping.getCity());
+                st.setString(3, shipping.getZipcode());
+                st.setString(4, shipping.getHomeAddress());
+                st.setInt(5, shipping.getId());
 
-
+                //execute update
+                st.executeUpdate();
             }
             user.setShipping(shipping);
 
             //update billing
             if (user.getBilling() == null) {
-                //insert billing in database and update user parameter
+                //set parameters of billing address insert
+                st = conn.prepareStatement(insertAddressQuery);
+                st.setString(1, billing.getCountry());
+                st.setString(2, billing.getCity());
+                st.setString(3, billing.getZipcode());
+                st.setString(4, billing.getHomeAddress());
 
+                //execute insert and get id
+                st.execute();
+                ResultSet rs = st.getResultSet();
+                if (rs.next()) {
+                    billingId = rs.getInt(1);
+                }
 
+                //update billing
+                billing.setId(billingId);
             } else {
-                //update billing in database and update user parameter
+                //set parameters of billing address update
+                st = conn.prepareStatement(updateAddressQuery);
+                st.setString(1, billing.getCountry());
+                st.setString(2, billing.getCity());
+                st.setString(3, billing.getZipcode());
+                st.setString(4, billing.getHomeAddress());
+                st.setInt(5, billing.getId());
 
-
+                //execute update
+                st.executeUpdate();
             }
             user.setBilling(billing);
 
-            //update the rest of the data
+            //set parameters of user update
+            st = conn.prepareStatement(updateUserQuery);
+            st.setString(1, name);
+            st.setString(2, email);
+            st.setString(3, password);
+            st.setString(4, phone);
+            st.setInt(5, billingId);
+            st.setInt(6, shippingId);
+            st.setInt(7, user.getId());
 
+            //execute update of user data in database
+            st.executeUpdate();
+
+            //update user parameter
+            user.setName(name);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setPhoneNumber(phone);
+
+            //close statement
+            st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: User update error => " + exception.getMessage());
         }
