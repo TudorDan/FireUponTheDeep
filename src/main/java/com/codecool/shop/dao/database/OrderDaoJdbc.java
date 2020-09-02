@@ -32,13 +32,14 @@ public class OrderDaoJdbc implements OrderDao {
 
             //insert new order, get the id, and update parameter
             String insertOrder = "INSERT INTO orders(name, user_id, is_my_cart, date, order_status) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+                    "VALUES (?, ?, ?, ?, ?::OrderStatus) " +
+                    "RETURNING id";
             int orderId = 0;
             st = conn.prepareStatement(insertOrder);
             st.setString(1, "Order");
             st.setInt(2, order.getUser().getId());
             st.setBoolean(3, false);
-            st.setDate(4, (Date) order.getDate());
+            st.setDate(4, new Date(order.getDate().getTime()));
             st.setString(5, order.getStatus().toString());
             ResultSet rs = st.executeQuery();
             if(rs.next()) {
@@ -57,7 +58,7 @@ public class OrderDaoJdbc implements OrderDao {
             String insertEvent = "INSERT INTO events(date, description, order_id) " +
                     "VALUES (?, ?, ?)";
             st = conn.prepareStatement(insertEvent);
-            st.setDate(1, (Date) order.getDate());
+            st.setDate(1, new Date(order.getDate().getTime()));
             st.setString(2, "Order created. Status = " + order.getStatus());
             st.setInt(3, orderId);
 
