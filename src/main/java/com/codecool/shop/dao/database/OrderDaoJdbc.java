@@ -153,9 +153,4 @@ public class OrderDaoJdbc implements OrderDao {
 
         return orders;
     }
-    
-    public List<Item> getItemsByOrderId() {
-        // TODO: 23.08.2020 getItemsByOrderId
-        return null;
-    }
 }
