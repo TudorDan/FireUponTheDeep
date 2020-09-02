@@ -349,6 +349,67 @@ public class UserDaoJdbc implements UserDao {
 
     @Override
     public void updateUserCart(User user, Cart cart) {
-        // TODO: 18.08.2020 user updateUserCart(user, cart)
+        try(Connection conn = databaseManager.getConnection()) {
+            PreparedStatement st;
+
+            //get id of user cart
+            int orderId = 0;
+            String getCartIdQuerry = "SELECT id FROM orders WHERE user_id = ? AND is_my_cart = true";
+            st = conn.prepareStatement(getCartIdQuerry);
+            st.setInt(1, user.getId());
+            ResultSet rs = st.executeQuery();
+            if(rs.next()) {
+                orderId = rs.getInt(1);
+            }
+
+            //delete old items
+            String deleteItemsQuery = "DELETE FROM items WHERE order_id = ?";
+            st = conn.prepareStatement(deleteItemsQuery);
+            st.setInt(1, orderId);
+            st.executeUpdate();
+
+            //add new items
+            String insertItemsQuery = "INSERT INTO items(price_id, order_id, quantity) " +
+                    "VALUES (?, ?, ?)";
+            st = conn.prepareStatement(insertItemsQuery);
+            List<Item> items = cart.getItems();
+            for(Item item : items) {
+                st.setInt(1, getCurrentPriceIdByProduct(item.getProduct().getId()));
+                st.setInt(2, orderId);
+                st.setInt(3, item.getQuantity());
+                st.addBatch();
+            }
+            st.executeBatch();
+
+            //close statement
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: User cart update error => " + exception.getMessage());
+        }
+    }
+
+    private int getCurrentPriceIdByProduct(int id) {
+        String query = "SELECT id " +
+                "FROM prices " +
+                "WHERE product_id = ? " +
+                "ORDER BY date DESC " +
+                "LIMIT 1";
+
+        int priceId = 0;
+        try (Connection conn = databaseManager.getConnection()){
+            // set all the prepared statement parameters
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+
+            // execute the prepared statement select
+            ResultSet result = st.executeQuery();
+            if(result.next()) {
+                priceId = result.getInt(1);
+            }
+            st.close();
+        } catch (SQLException exception) {
+            System.err.println("ERROR: Product get prices error => " + exception.getMessage());
+        }
+        return priceId;
     }
 }
