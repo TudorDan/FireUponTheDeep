@@ -1,10 +1,14 @@
 package com.codecool.shop.dao.database;
 
+import com.codecool.shop.dao.DataStore;
+import com.codecool.shop.model.Item;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.util.List;
 import java.util.Properties;
 
 public class DatabaseManager {
@@ -72,5 +76,16 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    static void insertOrderItems(PreparedStatement st, int orderId, List<Item> items) throws SQLException {
+        DataStore dataStore = DataStore.getInstance();
+        for(Item item : items) {
+            st.setInt(1, dataStore.productDao.getCurrentPriceIdByProduct(item.getProduct().getId()));
+            st.setInt(2, orderId);
+            st.setInt(3, item.getQuantity());
+            st.addBatch();
+        }
+        st.executeBatch();
     }
 }
