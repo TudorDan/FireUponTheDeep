@@ -1,6 +1,5 @@
 package com.codecool.shop.dao.database;
 
-import com.codecool.shop.dao.DataStore;
 import com.codecool.shop.dao.UserDao;
 import com.codecool.shop.model.*;
 
@@ -375,14 +374,7 @@ public class UserDaoJdbc implements UserDao {
                     "VALUES (?, ?, ?)";
             st = conn.prepareStatement(insertItemsQuery);
             List<Item> items = cart.getItems();
-            DataStore dataStore = DataStore.getInstance();
-            for(Item item : items) {
-                st.setInt(1, dataStore.productDao.getCurrentPriceIdByProduct(item.getProduct().getId()));
-                st.setInt(2, orderId);
-                st.setInt(3, item.getQuantity());
-                st.addBatch();
-            }
-            st.executeBatch();
+            DatabaseManager.insertOrderItems(st, orderId, items);
 
             //close statement
             st.close();
