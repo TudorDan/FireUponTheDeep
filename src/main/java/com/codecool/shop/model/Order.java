@@ -20,6 +20,15 @@ public class Order extends BaseModel{
         log = new Log();
     }
 
+    public Order(int id, String name, Date date, OrderStatus status, Cart cart) {
+        super(id, name, "");
+        this.date = date;
+        orderStatus = status;
+        this.cart = cart;
+        user = null;
+        log = new Log();
+    }
+
     public Log getLog() { return log; }
 
     public Cart getCart() {
