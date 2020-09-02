@@ -158,11 +158,11 @@ public class UserDaoJdbc implements UserDao {
     // TODO: 27.08.2020 rewrite select in getAuthenticatedUser to also extract myCart items data and delete this
     //  function
     private List<Item> getMyCartItemsByUserId(int id) {
-        String query = "SELECT itm.quantity, " +
-                "     pri.sum, pri.currency, pri.date, " +
-                "     pro.id, pro.name, pro.description, pro.image_file_name, " +
-                "     sup.id, sup.name, sup.description, " +
-                "     cat.id, cat.name, cat.department, cat.description " +
+        String query = "SELECT itm.quantity AS itmQuantity, " +
+                "     pri.sum AS priSum, pri.currency AS priCurrency, pri.date AS priDate, " +
+                "     pro.id AS proId, pro.name AS proName, pro.description AS proDesc, pro.image_file_name AS proImage, " +
+                "     sup.id AS supId, sup.name AS supName, sup.description AS supDesc, " +
+                "     cat.id AS catId, cat.name AS catName, cat.department AS catDept, cat.description AS catDesc " +
                 "FROM users usr, orders ord, items itm, prices pri, " +
                 "     products pro, suppliers sup, categories cat " +
                 "WHERE usr.id = ? " +
@@ -184,35 +184,35 @@ public class UserDaoJdbc implements UserDao {
             ResultSet result = st.executeQuery();
             while (result.next()) {
                 //crate supplier
-                int supId = result.getInt("sup.id");
-                String supName = result.getString("sup.name");
-                String supDesc = result.getString("sup.description");
+                int supId = result.getInt("supId");
+                String supName = result.getString("supName");
+                String supDesc = result.getString("supDesc");
                 Supplier sup = new Supplier(supId, supName, supDesc);
 
                 //crate category
-                int catId = result.getInt("cat.id");
-                String catName = result.getString("cat.name");
-                String catDept = result.getString("cat.department");
-                String catDesc = result.getString("cat.description");
+                int catId = result.getInt("catId");
+                String catName = result.getString("catName");
+                String catDept = result.getString("catDept");
+                String catDesc = result.getString("catDesc");
                 Category cat = new Category(catId, catName, catDept, catDesc);
 
                 //create price pri.sum, pri.currency, pri.date
-                double sum = result.getDouble("pri.sum");
-                String currency = result.getString("pri.currency");
-                java.util.Date date = result.getDate("pri.date");
+                double sum = result.getDouble("priSum");
+                String currency = result.getString("priCurrency");
+                java.util.Date date = result.getDate("priDate");
                 Price price = new Price(sum, currency, date);
                 List<Price> prices = new ArrayList<>();
                 prices.add(price);
 
                 //create product
-                int proId = result.getInt("pro.id");
-                String proName = result.getString("pro.name");
-                String proDesc = result.getString("pro.description");
-                String proImg = result.getString("pro.image_file_name");
+                int proId = result.getInt("proId");
+                String proName = result.getString("proName");
+                String proDesc = result.getString("proDesc");
+                String proImg = result.getString("proImage");
                 Product product = new Product(proId, proName, proDesc, proImg, prices, cat, sup);
 
                 //create item and add to list
-                int quantity = result.getInt("itm.quantity");
+                int quantity = result.getInt("itmQuantity");
                 items.add(new Item(product, price, quantity));
             }
             st.close();
@@ -354,8 +354,8 @@ public class UserDaoJdbc implements UserDao {
 
             //get id of user cart
             int orderId = 0;
-            String getCartIdQuerry = "SELECT id FROM orders WHERE user_id = ? AND is_my_cart = true";
-            st = conn.prepareStatement(getCartIdQuerry);
+            String getCartIdQuery = "SELECT id FROM orders WHERE user_id = ? AND is_my_cart = true";
+            st = conn.prepareStatement(getCartIdQuery);
             st.setInt(1, user.getId());
             ResultSet rs = st.executeQuery();
             if(rs.next()) {
