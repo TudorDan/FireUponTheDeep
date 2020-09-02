@@ -72,6 +72,7 @@ public class OrderDaoJdbc implements OrderDao {
     @Override
     public void setPayed(Order order) {
         try(Connection conn = databaseManager.getConnection()) {
+            //change order status
             String updateOrderStatus = "UPDATE orders " +
                     "SET order_status = CAST(? AS OrderStatus) " +
                     "WHERE id = ?";
@@ -79,6 +80,16 @@ public class OrderDaoJdbc implements OrderDao {
             st.setString(1, OrderStatus.PAID.toString());
             st.setInt(2, order.getId());
             st.executeUpdate();
+
+            //add event
+            String insertEvent = "INSERT INTO events(date, description, order_id) " +
+                    "VALUES (?, ?, ?)";
+            st = conn.prepareStatement(insertEvent);
+            st.setDate(1, new Date(order.getDate().getTime()));
+            st.setString(2, "Order paid. Status = " + order.getStatus());
+            st.setInt(3, order.getId());
+            st.executeUpdate();
+
             st.close();
         } catch (SQLException exception) {
             System.err.println("ERROR: Set payed order error => " + exception.getMessage());
