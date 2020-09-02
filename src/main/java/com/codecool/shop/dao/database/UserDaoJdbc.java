@@ -259,6 +259,7 @@ public class UserDaoJdbc implements UserDao {
 
             //update shipping
             if (user.getShipping() == null) { //no shipping address yet
+                // TODO: 2.09.2020 write auxiliary functions to avoid code duplication
                 //set parameters of shipping address insert
                 st = conn.prepareStatement(insertAddressQuery);
                 st.setString(1, shipping.getCountry());
