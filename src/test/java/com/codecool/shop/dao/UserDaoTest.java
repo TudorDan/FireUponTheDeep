@@ -56,12 +56,12 @@ class UserDaoTest {
     @Test
     void testRemoveUser() {
         //add new user
-        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        User user = new User("testname", "removemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
         dataStore.userDao.add(user);
 
-        Assertions.assertTrue(dataStore.userDao.isSignedUp("testemail@test.com"));
+        Assertions.assertTrue(dataStore.userDao.isSignedUp("removemail@test.com"));
         dataStore.userDao.remove(user);
-        Assertions.assertFalse(dataStore.userDao.isSignedUp("testemail@test.com"));
+        Assertions.assertFalse(dataStore.userDao.isSignedUp("removemail@test.com"));
     }
 
     @Test
@@ -87,7 +87,7 @@ class UserDaoTest {
     @Test
     void testUpdateUserCart() {
         //add new user
-        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        User user = new User("testname", "cartmail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
         dataStore.userDao.add(user);
 
         //get number of items before update
@@ -134,9 +134,10 @@ class UserDaoTest {
         Assertions.assertEquals(before + 3, after, "Wrong number of items in user variable");
 
         //get and check number of items in user (database) cart after update
-        user = dataStore.userDao.getAuthenticatedUser("testemail@test.com", "testpass");
+        user = dataStore.userDao.getAuthenticatedUser("cartmail@test.com", "testpass");
         Assertions.assertNotNull(user, "Wrong mail or password");
         after = user.getMyCart().getNumberOfItems();
         Assertions.assertEquals(before + 3, after, "Wrong number of items in user database");
+        dataStore.userDao.remove(user);
     }
 }
