@@ -1,12 +1,12 @@
 package com.codecool.shop.dao;
 
 import com.codecool.shop.Tester;
-import com.codecool.shop.model.Address;
-import com.codecool.shop.model.User;
-import com.codecool.shop.model.UserStatus;
+import com.codecool.shop.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 
 class UserDaoTest {
     private static DataStore dataStore;
@@ -85,7 +85,58 @@ class UserDaoTest {
     }
 
     @Test
-    void updateUserCart() {
-        Assertions.fail();
+    void testUpdateUserCart() {
+        //add new user
+        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        //get number of items before update
+        int before = user.getMyCart().getNumberOfItems();
+
+        //create new cart
+        Cart cart = new Cart();
+
+        //add valid products to new cart
+        Date currentDate = new Date();
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        Supplier bvlgari = new Supplier("Bvlgari", "Luxury brand known for its jewellery, watches, fragrances, " +
+                "accessories and leather goods");
+        dataStore.supplierDao.add(bvlgari);
+        Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
+                "ornament");
+        dataStore.categoryDao.add(ring);
+        Category necklace = new Category("Necklace", "Jewelry", "String of stones, beads, jewels, or the like, for " +
+                "wearing");
+        dataStore.categoryDao.add(necklace);
+        Category earrings = new Category("Earrings", "Jewelry", "Ornaments worn as accessories");
+        dataStore.categoryDao.add(earrings);
+        Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
+                "white gold rings with sapphire and diamonds", "pic1.jpg", ring, prada);
+        Product product2 = new Product("Bvlgari Ruby Earrings", 500, "USD", currentDate, "Ruby inlaid earrings in " +
+                "genuine 925 silver. Red tourmaline jewelry. The earrings are plated with 18 carat white gold.",
+                "pic2.jpg", earrings, bvlgari);
+        Product product3 = new Product("Prada Blue crystal Necklace", 350, "USD", currentDate, "Simple and " +
+                "fashionable design. Material: crystal, resin and metal alloy. Pendant dimensions: 2x2cm. Chain length: 38 cm.", "pic3.jpg", necklace, prada);
+        dataStore.productDao.add(product1);
+        dataStore.productDao.add(product2);
+        dataStore.productDao.add(product3);
+        cart.addProduct(product1, product1.getCurrentPrice());
+        cart.addProduct(product2, product2.getCurrentPrice());
+        cart.addProduct(product3, product3.getCurrentPrice());
+
+        //update user cart
+        dataStore.userDao.updateUserCart(user, cart);
+
+        //get and check number of items in user (parameter) cart after update
+        int after = user.getMyCart().getNumberOfItems();
+        Assertions.assertEquals(before + 3, after, "Wrong number of items in user variable");
+
+        //get and check number of items in user (database) cart after update
+        user = dataStore.userDao.getAuthenticatedUser("testemail@test.com", "testpass");
+        Assertions.assertNotNull(user, "Wrong mail or password");
+        after = user.getMyCart().getNumberOfItems();
+        Assertions.assertEquals(before + 3, after, "Wrong number of items in user database");
     }
 }
