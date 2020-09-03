@@ -37,8 +37,19 @@ class UserDaoTest {
     }
 
     @Test
-    void getAuthenticatedUser() {
-        Assertions.fail();
+    void testGetAuthenticatedUser() {
+        //add new user
+        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        //get users
+        User user1Good = dataStore.userDao.getAuthenticatedUser("testemail@test.com", "testpass");
+        User user2WrongPass = dataStore.userDao.getAuthenticatedUser("testemail@test.com", "wrongpass");
+        User user3WrongMail = dataStore.userDao.getAuthenticatedUser("wrongmail@test.com", "testpass");
+
+        Assertions.assertEquals(user.getId(), user1Good.getId());
+        Assertions.assertNull(user2WrongPass);
+        Assertions.assertNull(user3WrongMail);
     }
 
     @Test
