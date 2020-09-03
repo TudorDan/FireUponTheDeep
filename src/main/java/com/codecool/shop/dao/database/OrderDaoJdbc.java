@@ -81,6 +81,9 @@ public class OrderDaoJdbc implements OrderDao {
             st.setInt(2, order.getId());
             st.executeUpdate();
 
+            //update parameter
+            order.pay();
+
             //add event
             String insertEvent = "INSERT INTO events(date, description, order_id) " +
                     "VALUES (?, ?, ?)";
