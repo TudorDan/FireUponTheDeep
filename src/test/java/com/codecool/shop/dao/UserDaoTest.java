@@ -53,8 +53,14 @@ class UserDaoTest {
     }
 
     @Test
-    void remove() {
-        Assertions.fail();
+    void testRemoveUser() {
+        //add new user
+        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        Assertions.assertTrue(dataStore.userDao.isSignedUp("testemail@test.com"));
+        dataStore.userDao.remove(user);
+        Assertions.assertFalse(dataStore.userDao.isSignedUp("testemail@test.com"));
     }
 
     @Test
