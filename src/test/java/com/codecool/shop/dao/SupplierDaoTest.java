@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 class SupplierDaoTest {
     private static DataStore dataStore;
 
@@ -26,43 +24,17 @@ class SupplierDaoTest {
     }
 
     @Test
-    void testFindSupplier() {
-        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
-                "accessories, shoes, ready-to-wear, perfumes ");
-        dataStore.supplierDao.add(prada);
-        Supplier dbPrada = dataStore.supplierDao.find(prada.getId());
-        Assertions.assertAll("Supplier:",
-                () -> Assertions.assertEquals(prada.getId(), dbPrada.getId()),
-                () -> Assertions.assertEquals(prada.getName(), dbPrada.getName()),
-                () -> Assertions.assertEquals(prada.getDescription(), dbPrada.getDescription())
-        );
+    void find() {
+        Assertions.fail();
     }
 
     @Test
-    void testRemoveSupplier() {
-        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
-                "accessories, shoes, ready-to-wear, perfumes ");
-        dataStore.supplierDao.add(prada);
-        int before = dataStore.supplierDao.getAll().size();
-        dataStore.supplierDao.remove(prada.getId());
-        Assertions.assertEquals(dataStore.supplierDao.getAll().size(), before - 1);
+    void remove() {
+        Assertions.fail();
     }
 
     @Test
-    void testGetAllSuppliers() {
-        List<Supplier> supplierList = dataStore.supplierDao.getAll();
-        int before = supplierList.size();
-
-        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
-                "accessories, shoes, ready-to-wear, perfumes ");
-        Supplier bvlgari = new Supplier("Bvlgari", "Luxury brand known for its jewellery, watches, fragrances, " +
-                "accessories and leather goods");
-        dataStore.supplierDao.add(prada);
-        dataStore.supplierDao.add(bvlgari);
-
-        supplierList = dataStore.supplierDao.getAll();
-        int after = supplierList.size();
-
-        Assertions.assertEquals(after, before + 2);
+    void getAll() {
+        Assertions.fail();
     }
 }
