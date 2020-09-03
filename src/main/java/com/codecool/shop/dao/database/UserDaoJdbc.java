@@ -376,6 +376,9 @@ public class UserDaoJdbc implements UserDao {
             List<Item> items = cart.getItems();
             DatabaseManager.insertOrderItems(st, orderId, items);
 
+            //update parameter
+            user.setMyCart(cart);
+
             //close statement
             st.close();
         } catch (SQLException exception) {
