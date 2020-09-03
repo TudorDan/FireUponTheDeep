@@ -112,13 +112,59 @@ class ProductDaoTest {
     }
 
     @Test
-    void getBy() {
-        Assertions.fail();
+    void testGetBySupplier() {
+        //add new supplier
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+
+        //get number of supplier products before add
+        List<Product> productList = dataStore.productDao.getBy(prada);
+        int before = productList.size();
+
+        //add new category product
+        Date currentDate = new Date();
+        Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
+                "ornament");
+        dataStore.categoryDao.add(ring);
+        Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
+                "white gold rings with sapphire and diamonds", "pic1.jpg", ring, prada);
+        dataStore.productDao.add(product1);
+
+        //get number of supplier products after add
+        productList = dataStore.productDao.getBy(prada);
+        int after = productList.size();
+
+        //check
+        Assertions.assertEquals(before+1, after);
     }
 
     @Test
-    void testGetBy() {
-        Assertions.fail();
+    void testGetByCategory() {
+        //add new category
+        Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
+                "ornament");
+        dataStore.categoryDao.add(ring);
+
+        //get number of category products before add
+        List<Product> productList = dataStore.productDao.getBy(ring);
+        int before = productList.size();
+
+        //add new supplier product
+        Date currentDate = new Date();
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
+                "white gold rings with sapphire and diamonds", "pic1.jpg", ring, prada);
+        dataStore.productDao.add(product1);
+
+        //get number of category products after add
+        productList = dataStore.productDao.getBy(ring);
+        int after = productList.size();
+
+        //check
+        Assertions.assertEquals(before+1, after);
     }
 
     @Test
