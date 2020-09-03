@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 class SupplierDaoTest {
     private static DataStore dataStore;
 
@@ -47,7 +49,20 @@ class SupplierDaoTest {
     }
 
     @Test
-    void getAll() {
-        Assertions.fail();
+    void testGetAllSuppliers() {
+        List<Supplier> supplierList = dataStore.supplierDao.getAll();
+        int before = supplierList.size();
+
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        Supplier bvlgari = new Supplier("Bvlgari", "Luxury brand known for its jewellery, watches, fragrances, " +
+                "accessories and leather goods");
+        dataStore.supplierDao.add(prada);
+        dataStore.supplierDao.add(bvlgari);
+
+        supplierList = dataStore.supplierDao.getAll();
+        int after = supplierList.size();
+
+        Assertions.assertEquals(after, before + 2);
     }
 }
