@@ -22,7 +22,7 @@ class SupplierDaoTest {
         Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
                 "accessories, shoes, ready-to-wear, perfumes ");
         dataStore.supplierDao.add(prada);
-        Assertions.assertEquals(1, prada.getId());
+        Assertions.assertTrue(prada.getId() > 0);
     }
 
     @Test
