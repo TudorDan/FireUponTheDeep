@@ -168,7 +168,19 @@ class ProductDaoTest {
     }
 
     @Test
-    void getCurrentPriceIdByProduct() {
-        Assertions.fail();
+    void testGetCurrentPriceIdByProductId() {
+        //add new product
+        Date currentDate = new Date();
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
+                "ornament");
+        dataStore.categoryDao.add(ring);
+        Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
+                "white gold rings with sapphire and diamonds", "pic1.jpg", ring, prada);
+        dataStore.productDao.add(product1);
+
+        Assertions.assertTrue(dataStore.productDao.getCurrentPriceIdByProduct(product1.getId()) > 0);
     }
 }
