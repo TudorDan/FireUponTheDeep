@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+import java.util.List;
 
 class ProductDaoTest {
     private static DataStore dataStore;
@@ -56,8 +57,32 @@ class ProductDaoTest {
     }
 
     @Test
-    void remove() {
-        Assertions.fail();
+    void testRemoveProduct() {
+        //ad new product
+        Date currentDate = new Date();
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an " +
+                "ornament");
+        dataStore.categoryDao.add(ring);
+        Product product1 = new Product("Prada Sapphire and diamonds Rings", 250 , "USD", currentDate, "24 karate " +
+                "white gold rings with sapphire and diamonds", "pic1.jpg", ring, prada);
+        dataStore.productDao.add(product1);
+
+        //get number of products before remove
+        List<Product> productList = dataStore.productDao.getAll();
+        int before = productList.size();
+
+        //remove
+        dataStore.productDao.remove(product1.getId());
+
+        //get number of products after remove
+        productList = dataStore.productDao.getAll();
+        int after = productList.size();
+
+        //check
+        Assertions.assertEquals(before-1, after);
     }
 
     @Test
