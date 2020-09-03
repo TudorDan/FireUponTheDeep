@@ -24,8 +24,16 @@ class SupplierDaoTest {
     }
 
     @Test
-    void find() {
-        Assertions.fail();
+    void testFindSupplier() {
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        Supplier dbPrada = dataStore.supplierDao.find(prada.getId());
+        Assertions.assertAll("Supplier:",
+                () -> Assertions.assertEquals(prada.getId(), dbPrada.getId()),
+                () -> Assertions.assertEquals(prada.getName(), dbPrada.getName()),
+                () -> Assertions.assertEquals(prada.getDescription(), dbPrada.getDescription())
+        );
     }
 
     @Test
