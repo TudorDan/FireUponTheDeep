@@ -37,8 +37,13 @@ class SupplierDaoTest {
     }
 
     @Test
-    void remove() {
-        Assertions.fail();
+    void testRemoveSupplier() {
+        Supplier prada = new Supplier("Prada", "Luxury fashion house, specializing in leather handbags, travel " +
+                "accessories, shoes, ready-to-wear, perfumes ");
+        dataStore.supplierDao.add(prada);
+        int before = dataStore.supplierDao.getAll().size();
+        dataStore.supplierDao.remove(prada.getId());
+        Assertions.assertEquals(dataStore.supplierDao.getAll().size(), before - 1);
     }
 
     @Test
