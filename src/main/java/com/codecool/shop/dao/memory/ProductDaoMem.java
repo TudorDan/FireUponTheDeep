@@ -60,6 +60,6 @@ public class ProductDaoMem implements ProductDao {
 
     @Override
     public int getCurrentPriceIdByProduct(int id) {
-        return 0;
+        return 1;
     }
 }
