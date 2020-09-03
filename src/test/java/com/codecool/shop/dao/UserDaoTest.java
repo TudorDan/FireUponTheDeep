@@ -67,17 +67,20 @@ class UserDaoTest {
     @Test
     void testUpdateUser() {
         //add new user
-        Address address = new Address("a", "a", "a", "a");
+        Address address1 = new Address("a", "a", "a", "a");
+        Address address2 = new Address("a", "a", "a", "a");
         User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
         dataStore.userDao.add(user);
 
-        dataStore.userDao.updateUser(user, "newname", "newmail", "newpass", "5678", address, address);
+        dataStore.userDao.updateUser(user, "newname", "newmail", "newpass", "5678", address1, address2);
 
         Assertions.assertAll("User update:",
                 () -> Assertions.assertEquals("newname", user.getName()),
                 () -> Assertions.assertEquals("newmail", user.getEmail()),
                 () -> Assertions.assertEquals("newpass", user.getPassword()),
-                () -> Assertions.assertEquals("5678", user.getPhoneNumber())
+                () -> Assertions.assertEquals("5678", user.getPhoneNumber()),
+                () -> Assertions.assertEquals(address1.getId(), user.getBilling().getId()),
+                () -> Assertions.assertEquals(address2.getId(), user.getShipping().getId())
         );
     }
 
