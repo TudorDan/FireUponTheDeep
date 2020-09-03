@@ -21,7 +21,7 @@ class CategoryDaoTest {
     void testAddCategory() {
         Category ring = new Category("Ring", "Jewelry", "Circular band, often set with gems, for wearing as an ornament");
         dataStore.categoryDao.add(ring);
-        Assertions.assertEquals(1, ring.getId());
+        Assertions.assertTrue(ring.getId() > 0);
     }
 
     @Test
