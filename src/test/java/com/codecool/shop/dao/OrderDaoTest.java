@@ -47,7 +47,22 @@ class OrderDaoTest {
     }
 
     @Test
-    void getOrdersOf() {
-        Assertions.fail();
+    void testGetOrdersOfUser() {
+        //add new user
+        User user = new User("testname", "ordermail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        //get number of orders before adding a new order
+        int before = dataStore.orderDao.getOrdersOf(user).size();
+
+        //add order for new user
+        Order order = new Order(new Cart(), user);
+        dataStore.orderDao.add(order);
+
+        //get number of orders after adding a new order
+        int after = dataStore.orderDao.getOrdersOf(user).size();
+
+        //check
+        Assertions.assertEquals(before+1, after);
     }
 }
