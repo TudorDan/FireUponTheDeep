@@ -1,6 +1,8 @@
 package com.codecool.shop.dao;
 
 import com.codecool.shop.Tester;
+import com.codecool.shop.model.User;
+import com.codecool.shop.model.UserStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,13 +17,23 @@ class UserDaoTest {
     }
 
     @Test
-    void add() {
-        Assertions.fail();
+    void testAddUser() {
+        //add new user
+        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        //check if id is set
+        Assertions.assertTrue(user.getId() > 0);
     }
 
     @Test
-    void isSignedUp() {
-        Assertions.fail();
+    void testIsSignedUpUser() {
+        //add new user
+        User user = new User("testname", "testemail@test.com", "testpass", "1234", null, null, UserStatus.SIGNED);
+        dataStore.userDao.add(user);
+
+        Assertions.assertTrue(dataStore.userDao.isSignedUp("testemail@test.com"));
+        Assertions.assertFalse(dataStore.userDao.isSignedUp("wrongemail"));
     }
 
     @Test
