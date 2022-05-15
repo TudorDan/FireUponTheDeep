@@ -48,14 +48,14 @@ public class ProductController extends HttpServlet {
             //apply category filter and store it in session
             Category category = dataStore.categoryDao.find(Integer.parseInt(categoryId));
             context.setVariable("products", dataStore.productDao.getBy(category));
-            session.setAttribute("category", categoryId);
-            session.removeAttribute("supplier");
+            //session.setAttribute("category", categoryId);
+            //session.removeAttribute("supplier");
         } else if (supplierId != null) {
             //apply supplier filter and store it in session
             Supplier supplier = dataStore.supplierDao.find(Integer.parseInt(supplierId));
             context.setVariable("products", dataStore.productDao.getBy(supplier));
-            session.setAttribute("supplier", supplierId);
-            session.removeAttribute("category");
+            //session.setAttribute("supplier", supplierId);
+            //session.removeAttribute("category");
         } else {
             //no filter = get all products
             context.setVariable("products", dataStore.productDao.getAll());
@@ -72,10 +72,11 @@ public class ProductController extends HttpServlet {
         String categoryId = req.getParameter("category");
         String supplierId = req.getParameter("supplier");
         String checkAll = req.getParameter("all");
+        System.out.println(checkAll);
         if (checkAll != null) {
             context.setVariable("products", dataStore.productDao.getAll());
-            session.removeAttribute("category");
-            session.removeAttribute("supplier");
+            //session.removeAttribute("category");
+            //session.removeAttribute("supplier");
         } else
             applyFilters(categoryId, supplierId);
 
